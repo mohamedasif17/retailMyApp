@@ -249,7 +249,7 @@ const handleSearch = (text) => {
 
       {/* Footer Button */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.addButton} >
+        <TouchableOpacity style={styles.addButton}  >
           <FontAwesome5 name="plus" size={22} color="#fff" />
           <Text style={styles.addButtonText}>Add New Product</Text>
         </TouchableOpacity>
