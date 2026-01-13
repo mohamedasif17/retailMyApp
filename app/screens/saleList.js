@@ -12,13 +12,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export default function SalesListScreen() {
-
   const SUBTLE = "#617c89";
   const navigation = useNavigation();
 
   const [activeTab, setActiveTab] = useState("All");
-  
- // Sample sales list (for example purpose, add more to test pagination)
+
+  // Sample sales list (for example purpose, add more to test pagination)
   const allSales = Array.from({ length: 45 }, (_, i) => ({
     id: `INV-${10234 - i}`,
     date: `Oct ${24 - (i % 30)}, 2023 • ${10 + (i % 12)}:00`,
@@ -27,7 +26,7 @@ export default function SalesListScreen() {
     status: ["Completed", "Pending", "Refunded"][i % 3],
     color: ["#1193d4", "#f59e0b", "#ef4444"][i % 3],
   }));
-   const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   // Filter sales by tab
@@ -111,16 +110,23 @@ export default function SalesListScreen() {
         ))}
       </ScrollView>
 
-    {/* LIST */}
+      {/* LIST */}
       <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         {pagedSales.map((item) => (
           <View key={item.id} style={styles.card}>
             <View style={styles.cardTop}>
               <View style={styles.cardLeft}>
                 <View
-                  style={[styles.roundIcon, { backgroundColor: item.color + "20" }]}
+                  style={[
+                    styles.roundIcon,
+                    { backgroundColor: item.color + "20" },
+                  ]}
                 >
-                  <FontAwesome5 name="file-invoice" size={20} color={item.color} />
+                  <FontAwesome5
+                    name="file-invoice"
+                    size={20}
+                    color={item.color}
+                  />
                 </View>
                 <View>
                   <Text style={styles.invoice}>{item.id}</Text>
@@ -145,7 +151,10 @@ export default function SalesListScreen() {
                 <Text style={styles.amount}>{item.amount}</Text>
               </View>
 
-              <TouchableOpacity style={styles.viewBtn}>
+              <TouchableOpacity style={styles.viewBtn}
+  onPress={() => navigation.navigate("saleViewScreen")}
+              
+              >
                 <Text style={styles.viewText}>View</Text>
               </TouchableOpacity>
             </View>
@@ -155,21 +164,29 @@ export default function SalesListScreen() {
 
       {/* PAGINATION */}
       <View style={styles.pagination}>
-        <TouchableOpacity onPress={() => goToPage(currentPage - 1)} style={styles.navBtn}>
+        <TouchableOpacity
+          onPress={() => goToPage(currentPage - 1)}
+          style={styles.navBtn}
+        >
           <FontAwesome5 name="chevron-left" size={18} color={SUBTLE} />
         </TouchableOpacity>
 
         <View style={styles.pages}>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <TouchableOpacity key={p} onPress={() => goToPage(p)}>
-              <Text style={[styles.page, currentPage === p && styles.pageActive]}>
+              <Text
+                style={[styles.page, currentPage === p && styles.pageActive]}
+              >
                 {p}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        <TouchableOpacity onPress={() => goToPage(currentPage + 1)} style={styles.navBtn}>
+        <TouchableOpacity
+          onPress={() => goToPage(currentPage + 1)}
+          style={styles.navBtn}
+        >
           <FontAwesome5 name="chevron-right" size={18} color={SUBTLE} />
         </TouchableOpacity>
       </View>
@@ -224,7 +241,7 @@ const styles = StyleSheet.create({
   tabs: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    marginBottom:10
+    marginBottom: 10,
   },
 
   tab: {

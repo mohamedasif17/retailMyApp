@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -17,106 +17,105 @@ export default function PurchaseListScreen() {
   const navigation = useNavigation();
 
   // --- PURCHASE DATA ---
- const purchases = [
-  {
-    supplier: "Tech Distributors Inc.",
-    id: "PUR-8922",
-    amount: "$1,250.00",
-    location: "Main Warehouse",
-    statuses: ["Received", "Pending Pay"],
-    color: "#2563eb",
-  },
-  {
-    supplier: "Global Foods Ltd.",
-    id: "PUR-8921",
-    amount: "$432.50",
-    location: "Downtown Branch",
-    statuses: ["Ordered", "Paid"],
-    color: "#9333ea",
-  },
-  {
-    supplier: "Office Supply Co.",
-    id: "PUR-8920",
-    amount: "$89.00",
-    location: "HQ Office",
-    statuses: ["Cancelled", "Refunded"],
-    color: "#64748b",
-    cancelled: true,
-  },
-  {
-    supplier: "Fashion Wholesaler",
-    id: "PUR-8919",
-    amount: "$2,800.00",
-    location: "Main Warehouse",
-    statuses: ["Received", "Paid"],
-    color: "#14b8a6",
-  },
-  {
-    supplier: "Local Supplier",
-    id: "PUR-8918",
-    amount: "$560.00",
-    location: "Branch 2",
-    statuses: ["Ordered", "Pending Pay"],
-    color: "#f97316",
-  },
-  {
-    supplier: "Another Supplier",
-    id: "PUR-8917",
-    amount: "$1,120.50",
-    location: "Warehouse 3",
-    statuses: ["Received"],
-    color: "#9333ea",
-  },
-  {
-    supplier: "Another Supplier Duplicate",
-    id: "PUR-8916", // <--- Make this unique
-    amount: "$1,120.50",
-    location: "Warehouse 3",
-    statuses: ["Received"],
-    color: "#9333ea",
-  },
-  {
-    supplier: "Another Supplier Duplicate",
-    id: "PUR-8915", // <--- Make this unique
-    amount: "$1,120.50",
-    location: "Warehouse 3",
-    statuses: ["Received"],
-    color: "#9333ea",
-  },
-  {
-    supplier: "Another Supplier Duplicate",
-    id: "PUR-8914", // <--- Make this unique
-    amount: "$1,120.50",
-    location: "Warehouse 3",
-    statuses: ["Received"],
-    color: "#9333ea",
-  },
-  {
-    supplier: "Another Supplier Duplicate",
-    id: "PUR-8913", // <--- Make this unique
-    amount: "$1,120.50",
-    location: "Warehouse 3",
-    statuses: ["Received"],
-    color: "#9333ea",
-  },
-  {
-    supplier: "Another Supplier Duplicate",
-    id: "PUR-8912", // <--- Make this unique
-    amount: "$1,120.50",
-    location: "Warehouse 3",
-    statuses: ["Received"],
-    color: "#9333ea",
-  },
-  {
-    supplier: "Another Supplier Duplicate",
-    id: "PUR-8911", // <--- Make this unique
-    amount: "$1,120.50",
-    location: "Warehouse 3",
-    statuses: ["Received"],
-    color: "#9333ea",
-  },
-];
-
+  const purchases = [
+    {
+      supplier: "Tech Distributors Inc.",
+      id: "PUR-8922",
+      amount: "$1,250.00",
+      location: "Main Warehouse",
+      statuses: ["Received", "Pending Pay"],
+      color: "#2563eb",
+    },
+    {
+      supplier: "Global Foods Ltd.",
+      id: "PUR-8921",
+      amount: "$432.50",
+      location: "Downtown Branch",
+      statuses: ["Ordered", "Paid"],
+      color: "#9333ea",
+    },
+    {
+      supplier: "Office Supply Co.",
+      id: "PUR-8920",
+      amount: "$89.00",
+      location: "HQ Office",
+      statuses: ["Cancelled", "Refunded"],
+      color: "#64748b",
+      cancelled: true,
+    },
+    {
+      supplier: "Fashion Wholesaler",
+      id: "PUR-8919",
+      amount: "$2,800.00",
+      location: "Main Warehouse",
+      statuses: ["Received", "Paid"],
+      color: "#14b8a6",
+    },
+    {
+      supplier: "Local Supplier",
+      id: "PUR-8918",
+      amount: "$560.00",
+      location: "Branch 2",
+      statuses: ["Ordered", "Pending Pay"],
+      color: "#f97316",
+    },
+    {
+      supplier: "Another Supplier",
+      id: "PUR-8917",
+      amount: "$1,120.50",
+      location: "Warehouse 3",
+      statuses: ["Received"],
+      color: "#9333ea",
+    },
+    {
+      supplier: "Another Supplier Duplicate",
+      id: "PUR-8916", // <--- Make this unique
+      amount: "$1,120.50",
+      location: "Warehouse 3",
+      statuses: ["Received"],
+      color: "#9333ea",
+    },
+    {
+      supplier: "Another Supplier Duplicate",
+      id: "PUR-8915", // <--- Make this unique
+      amount: "$1,120.50",
+      location: "Warehouse 3",
+      statuses: ["Received"],
+      color: "#9333ea",
+    },
+    {
+      supplier: "Another Supplier Duplicate",
+      id: "PUR-8914", // <--- Make this unique
+      amount: "$1,120.50",
+      location: "Warehouse 3",
+      statuses: ["Received"],
+      color: "#9333ea",
+    },
+    {
+      supplier: "Another Supplier Duplicate",
+      id: "PUR-8913", // <--- Make this unique
+      amount: "$1,120.50",
+      location: "Warehouse 3",
+      statuses: ["Received"],
+      color: "#9333ea",
+    },
+    {
+      supplier: "Another Supplier Duplicate",
+      id: "PUR-8912", // <--- Make this unique
+      amount: "$1,120.50",
+      location: "Warehouse 3",
+      statuses: ["Received"],
+      color: "#9333ea",
+    },
+    {
+      supplier: "Another Supplier Duplicate",
+      id: "PUR-8911", // <--- Make this unique
+      amount: "$1,120.50",
+      location: "Warehouse 3",
+      statuses: ["Received"],
+      color: "#9333ea",
+    },
+  ];
 
   // --- PAGINATION STATE ---
   const [currentPage, setCurrentPage] = useState(1);
@@ -219,25 +218,38 @@ export default function PurchaseListScreen() {
 
       {/* PAGINATION */}
       <View style={styles.pagination}>
-        <TouchableOpacity onPress={() => goToPage(currentPage - 1)} style={styles.navBtn}>
+        <TouchableOpacity
+          onPress={() => goToPage(currentPage - 1)}
+          style={styles.navBtn}
+        >
           <FontAwesome5 name="chevron-left" size={18} color={SUBTLE} />
         </TouchableOpacity>
 
         <View style={styles.pages}>
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <TouchableOpacity key={p} onPress={() => goToPage(p)}>
-              <Text style={[styles.page, currentPage === p && styles.pageActive]}>{p}</Text>
+              <Text
+                style={[styles.page, currentPage === p && styles.pageActive]}
+              >
+                {p}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        <TouchableOpacity onPress={() => goToPage(currentPage + 1)} style={styles.navBtn}>
+        <TouchableOpacity
+          onPress={() => goToPage(currentPage + 1)}
+          style={styles.navBtn}
+        >
           <FontAwesome5 name="chevron-right" size={18} color={SUBTLE} />
         </TouchableOpacity>
       </View>
 
       {/* FLOATING BUTTON */}
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate("AddPurchase")}
+      >
         <FontAwesome5 name="plus" size={22} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>
@@ -256,7 +268,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: "700", color: "#0f172a" },
 
-  card: { backgroundColor: "#fff", marginHorizontal: 14, marginTop: 12, borderRadius: 16, padding: 14 },
+  card: {
+    backgroundColor: "#fff",
+    marginHorizontal: 14,
+    marginTop: 12,
+    borderRadius: 16,
+    padding: 14,
+  },
   cardTop: { flexDirection: "row", justifyContent: "space-between" },
   left: { flexDirection: "row", gap: 12 },
 
@@ -268,9 +286,19 @@ const styles = StyleSheet.create({
 
   divider: { height: 1, backgroundColor: "#e5e7eb", marginVertical: 12 },
 
-  cardBottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  cardBottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   badges: { flexDirection: "row", gap: 6 },
-  badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, fontSize: 11, fontWeight: "700" },
+  badge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    fontSize: 11,
+    fontWeight: "700",
+  },
   green: { backgroundColor: "#dcfce7", color: "#15803d" },
   orange: { backgroundColor: "#ffedd5", color: "#c2410c" },
   blue: { backgroundColor: "#e0f2fe", color: "#0369a1" },
@@ -278,14 +306,45 @@ const styles = StyleSheet.create({
   gray: { backgroundColor: "#e5e7eb", color: "#475569" },
 
   actions: { flexDirection: "row", gap: 8 },
-  iconBtn: { width: 32, height: 32, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: "#f1f5f9" },
+  iconBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f1f5f9",
+  },
 
-  fab: { position: "absolute", right: 20, bottom: 100, width: 56, height: 56, borderRadius: 28, backgroundColor: "#1193d4", alignItems: "center", justifyContent: "center", elevation: 6 },
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 100,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#1193d4",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 6,
+  },
 
   /* Pagination */
-  pagination: { flexDirection: "row", justifyContent: "center", alignItems: "center", marginVertical: 10, gap: 12 },
+  pagination: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 10,
+    gap: 12,
+  },
   navBtn: { padding: 6, backgroundColor: "#f1f5f9", borderRadius: 6 },
   pages: { flexDirection: "row", gap: 8 },
-  page: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6, backgroundColor: "#f1f5f9", color: "#64748b", fontWeight: "700" },
+  page: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+    backgroundColor: "#f1f5f9",
+    color: "#64748b",
+    fontWeight: "700",
+  },
   pageActive: { backgroundColor: "#1193d4", color: "#fff" },
 });

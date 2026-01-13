@@ -1,11 +1,14 @@
 import React from "react";
 import { StatusBar } from "react-native";
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 
-import { NavigationContainer, NavigationIndependentTree } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  NavigationIndependentTree,
+} from "@react-navigation/native";
 import { MenuProvider } from "react-native-popup-menu";
 
-import DrawerNavigator from "./navigation/DrawerNavigator";
+import AppStackNavigator from "./navigation/AppStackNavigator";
 
 const App = () => {
   return (
@@ -14,10 +17,9 @@ const App = () => {
 
       <NavigationIndependentTree>
         <NavigationContainer>
-          <DrawerNavigator />
+          <AppStackNavigator />
         </NavigationContainer>
       </NavigationIndependentTree>
-
     </MenuProvider>
   );
 };

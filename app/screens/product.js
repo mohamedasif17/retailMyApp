@@ -226,8 +226,10 @@ const handleSearch = (text) => {
     </MenuTrigger>
 
     <MenuOptions customStyles={{ optionsContainer: styles.menuOptions }}>
-      <MenuOption onSelect={() => alert("Edit " + product.name)}>
-        <View style={styles.menuItem}>
+<MenuOption
+  onSelect={() => navigation.navigate("AddNewProduct")}
+>
+          <View style={styles.menuItem}>
           <FontAwesome5 name="edit" size={16} color="blue" />
           <Text style={styles.menuTextBlue}>Edit</Text>
         </View>
@@ -249,8 +251,11 @@ const handleSearch = (text) => {
 
       {/* Footer Button */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.addButton}  >
-          <FontAwesome5 name="plus" size={22} color="#fff" />
+<TouchableOpacity
+  style={styles.addButton}
+  onPress={() => navigation.navigate("AddNewProduct")}
+>
+            <FontAwesome5 name="plus" size={22} color="#fff" />
           <Text style={styles.addButtonText}>Add New Product</Text>
         </TouchableOpacity>
       </View>
