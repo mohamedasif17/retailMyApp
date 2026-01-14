@@ -18,6 +18,7 @@ import PurchaseScreen from "../screens/PurchaseList";
 
 /* CUSTOMER */
 import CustomerList from "../screens/CustomerList";
+import CreateCustomer from "../screens/createCustomerScreen";
 
 /* POS */
 import ClosePosScreen from "../screens/ClosePos";
@@ -52,6 +53,7 @@ export default function AppStackNavigator() {
 
       {/* CUSTOMER */}
       <Stack.Screen name="CustomerList" component={CustomerList} />
+      <Stack.Screen name="CreateCustomer" component={CreateCustomer} />
 
       {/* POS */}
       <Stack.Screen name="POS" component={POS} />

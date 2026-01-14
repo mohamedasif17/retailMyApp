@@ -1,4 +1,6 @@
+import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
+
 import React from "react";
 import {
   ScrollView,
@@ -29,7 +31,7 @@ export default function AddItemScreen() {
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-<FontAwesome5 name="chevron-left" size={18} color="#111" />
+          <FontAwesome5 name="chevron-left" size={18} color="#111" />
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>Add Item</Text>
@@ -44,7 +46,10 @@ export default function AddItemScreen() {
         {/* BASIC INFO */}
         <Section title="Basic Information">
           <Input label="Item name" placeholder="e.g. Organic Milk 1L" />
-          <TextArea label="Description" placeholder="Add details about the product..." />
+          <TextArea
+            label="Description"
+            placeholder="Add details about the product..."
+          />
 
           <View>
             <Label>Barcode</Label>
@@ -54,7 +59,6 @@ export default function AddItemScreen() {
                 placeholder="Scan or enter code"
                 placeholderTextColor={SUBTLE}
               />
-             
             </View>
           </View>
         </Section>
@@ -62,10 +66,23 @@ export default function AddItemScreen() {
         {/* PRICING */}
         <Section title="Pricing Details" bg>
           <Row>
-            <Input label="Buying cost" placeholder="0.00" keyboardType="numeric" />
-            <Input label="Selling price" placeholder="0.00" keyboardType="numeric" bold />
+            <Input
+              label="Buying cost"
+              placeholder="0.00"
+              keyboardType="numeric"
+            />
+            <Input
+              label="Selling price"
+              placeholder="0.00"
+              keyboardType="numeric"
+              bold
+            />
           </Row>
-          <Input label="Offer price (Optional)" placeholder="0.00" keyboardType="numeric" />
+          <Input
+            label="Offer price (Optional)"
+            placeholder="0.00"
+            keyboardType="numeric"
+          />
         </Section>
 
         {/* TAX */}
@@ -75,18 +92,27 @@ export default function AddItemScreen() {
             <Input label="Tax (%)" placeholder="0" keyboardType="numeric" />
           </Row>
 
-          <Row>
-            <Select label="Tax type (Buying)" value="Exclusive" />
-            <Select label="Tax type (Selling)" value="Inclusive" />
-          </Row>
+          <View style={styles.row}>
+            <Select label="Tax type (Buying)">
+              <Picker.Item label="Select location" value="Exclusive" />
+              <Picker.Item label="Main Warehouse" value="Inclusive" />
+              <Picker.Item label="Branch Store 1" value="branch" />
+            </Select>
+
+            <Select label="Tax type (Selling)">
+              <Picker.Item label="Select account" value="" />
+              <Picker.Item label="Cash Account" value="cash" />
+              <Picker.Item label="Business Bank" value="bank" />
+            </Select>
+          </View>
         </Section>
       </ScrollView>
 
       {/* FIXED BOTTOM BUTTON */}
-        <TouchableOpacity style={styles.addBtn}>
-          <FontAwesome5 name="plus-circle" size={20} color="#fff" />
-          <Text style={styles.addBtnText}>Add Item</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.addBtn}>
+        <FontAwesome5 name="plus-circle" size={20} color="#fff" />
+        <Text style={styles.addBtnText}>Add Item</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -247,7 +273,6 @@ const styles = StyleSheet.create({
     color: TEXT,
     fontWeight: "600",
   },
-
 
   addBtn: {
     height: 56,

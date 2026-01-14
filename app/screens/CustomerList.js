@@ -104,7 +104,7 @@ export default function CustomerListScreen() {
               </View>
 
               <View style={styles.actions}>
-                <TouchableOpacity style={styles.iconBtn}>
+                <TouchableOpacity style={styles.iconBtn}  onPress={() => navigation.navigate("CreateCustomer")}>
                   <FontAwesome5 name="edit" size={18} color={SUBTLE} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconBtn}>
@@ -166,7 +166,7 @@ export default function CustomerListScreen() {
       </View>
 
       {/* FAB */}
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity style={styles.fab}   onPress={() => navigation.navigate("CreateCustomer")}>
         <FontAwesome5 name="plus" size={22} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>
