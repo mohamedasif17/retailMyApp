@@ -29,6 +29,7 @@ import Dashboard from "../screens/Dashboard";
 import ExpenseList from "../screens/Expenses";
 import ReportScreen from "../screens/Report";
 import Setting from "../screens/Settings";
+import CreateExpense from "../screens/createExpense";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,7 @@ export default function AppStackNavigator() {
       {/* OTHER */}
       <Stack.Screen name="Dashboard" component={Dashboard} />
       <Stack.Screen name="ExpenseList" component={ExpenseList} />
+      <Stack.Screen name="CreateExpense" component={CreateExpense} />
       <Stack.Screen name="Report" component={ReportScreen} />
       <Stack.Screen name="Settings" component={Setting} />
 

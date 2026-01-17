@@ -88,7 +88,7 @@ export default function DrawerNavigator() {
         component={Expenses}
         options={{
           drawerIcon: () => (
-            <FontAwesome5 name="file-alt" size={20} color="teal" />
+<FontAwesome5 name="wallet" size={20} color="teal" />
           ),
         }}
       />

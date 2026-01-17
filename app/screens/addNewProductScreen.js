@@ -95,14 +95,14 @@ export default function AddItemScreen() {
           <View style={styles.row}>
             <Select label="Tax type (Buying)">
               <Picker.Item label="Select location" value="Exclusive" />
-              <Picker.Item label="Main Warehouse" value="Inclusive" />
-              <Picker.Item label="Branch Store 1" value="branch" />
+              <Picker.Item label="Inclusive" value="Inclusive" />
+              <Picker.Item label="Exclusive" value="Exclusive" />
             </Select>
 
             <Select label="Tax type (Selling)">
-              <Picker.Item label="Select account" value="" />
-              <Picker.Item label="Cash Account" value="cash" />
-              <Picker.Item label="Business Bank" value="bank" />
+             <Picker.Item label="Select location" value="Exclusive" />
+              <Picker.Item label="Inclusive" value="Inclusive" />
+              <Picker.Item label="Exclusive" value="Exclusive" />
             </Select>
           </View>
         </Section>
