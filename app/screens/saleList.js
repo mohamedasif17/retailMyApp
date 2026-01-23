@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export default function SalesListScreen() {
@@ -79,7 +78,7 @@ export default function SalesListScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
       <View style={styles.header}>
@@ -190,7 +189,7 @@ export default function SalesListScreen() {
           <FontAwesome5 name="chevron-right" size={18} color={SUBTLE} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 /* STATUS BADGE COLORS */

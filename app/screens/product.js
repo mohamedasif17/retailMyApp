@@ -18,7 +18,6 @@ import {
   MenuOptions,
   MenuTrigger,
 } from "react-native-popup-menu";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const productsData = [
   {
@@ -155,7 +154,7 @@ const handleSearch = (text) => {
 
   
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
 
     <View style={styles.container}>
           <StatusBar
@@ -260,7 +259,7 @@ const handleSearch = (text) => {
         </TouchableOpacity>
       </View>
     </View>
-    </SafeAreaView>
+    </View>
 
   );
 }

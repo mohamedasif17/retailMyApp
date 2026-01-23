@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
@@ -22,7 +21,7 @@ export default function DashboardScreen() {
       const navigation = useNavigation();
     
   return (
-    <SafeAreaView style={styles.safe}>
+    <View style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
       {/* HEADER */}
@@ -121,7 +120,7 @@ export default function DashboardScreen() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

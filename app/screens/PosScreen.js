@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const PRIMARY = "#0ea5e9";
@@ -24,7 +23,7 @@ export default function PosScreen() {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <View style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
       {/* HEADER */}
@@ -110,7 +109,7 @@ export default function PosScreen() {
           <FontAwesome5 name="arrow-right" size={18} color="#fff" />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

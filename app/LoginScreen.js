@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Alert, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const PRIMARY = "#1193d4";
   const BG = "#f6f7f8";
   const TEXT = "#111618";
@@ -26,36 +26,36 @@ export default function Login() {
     return re.test(email);
   };
 
+  
+ 
   const handleLogin = () => {
-    let valid = true;
+  let valid = true;
 
-    // Reset errors
-    setEmailError("");
-    setPasswordError("");
+  setEmailError("");
+  setPasswordError("");
 
-    // Email validation
-    if (!email) {
-      setEmailError("Email is required");
-      valid = false;
-    } else if (!validateEmail(email)) {
-      setEmailError("Invalid email format");
-      valid = false;
-    }
+  if (!email) {
+    setEmailError("Email is required");
+    valid = false;
+  } else if (!validateEmail(email)) {
+    setEmailError("Invalid email format");
+    valid = false;
+  }
 
-    // Password validation
-    if (!password) {
-      setPasswordError("Password is required");
-      valid = false;
-    } else if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-      valid = false;
-    }
+  if (!password) {
+    setPasswordError("Password is required");
+    valid = false;
+  } else if (password.length < 6) {
+    setPasswordError("Password must be at least 6 characters");
+    valid = false;
+  }
 
-    if (!valid) return;
+  if (!valid) return;
 
-    // TODO: Replace this with real authentication
-    Alert.alert("Login Success", `Email: ${email}`);
-  };
+  // ✅ GO TO DRAWER
+  navigation.replace("Drawer");
+};
+
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.container}>

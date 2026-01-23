@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const PRIMARY = "#1193d4";
@@ -19,7 +18,7 @@ const SUBTLE = "#6b7280";
 export default function ClosePOSScreen() {
     const navigation = useNavigation();
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -91,7 +90,7 @@ export default function ClosePOSScreen() {
           <Text style={styles.closeText}>Close Register</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

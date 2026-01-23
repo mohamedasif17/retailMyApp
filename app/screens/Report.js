@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export default function ReportScreen() {
@@ -32,7 +31,7 @@ export default function ReportScreen() {
   const formatDate = (date) => date.toISOString().split("T")[0];
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
       <View style={styles.container}>
         <StatusBar
           barStyle="dark-content"
@@ -256,7 +255,7 @@ export default function ReportScreen() {
           />
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

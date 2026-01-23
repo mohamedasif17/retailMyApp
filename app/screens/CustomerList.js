@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const PRIMARY = "#1193d4";
@@ -72,7 +71,7 @@ export default function CustomerListScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
       {/* HEADER */}
@@ -169,7 +168,7 @@ export default function CustomerListScreen() {
       <TouchableOpacity style={styles.fab}   onPress={() => navigation.navigate("CreateCustomer")}>
         <FontAwesome5 name="plus" size={22} color="#fff" />
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 }
 

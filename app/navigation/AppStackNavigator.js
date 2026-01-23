@@ -5,6 +5,7 @@ import React from "react";
 import DrawerNavigator from "./DrawerNavigator";
 
 /* PRODUCT */
+import Login from "../LoginScreen";
 import AddNewProduct from "../screens/addNewProductScreen";
 import AddPurchase from "../screens/addPurchasecreen";
 import Product from "../screens/product";
@@ -38,6 +39,7 @@ export default function AppStackNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       
       {/* MAIN APP (DRAWER) */}
+      <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Drawer" component={DrawerNavigator} />
 
       {/* PRODUCT FLOW */}
