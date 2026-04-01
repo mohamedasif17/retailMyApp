@@ -1,7 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
-
-import React from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StatusBar,
@@ -12,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const PRIMARY = "#1193d4";
@@ -22,8 +22,112 @@ const TEXT = "#111827";
 const SUBTLE = "#6b7280";
 
 export default function AddItemScreen() {
-  const navigation = useNavigation();
 
+
+  const navigation = useNavigation();
+const [name, setName] = useState("");
+const [barcode, setBarcode] = useState("");
+const [buyingCost, setBuyingCost] = useState("");
+const [sellingPrice, setSellingPrice] = useState("");
+
+// const handleAddProduct = async () => {
+//   try {
+//     const response = await fetch("http://10.119.88.215:8000/products", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         name,
+//         barcode,
+//         buyingCost: Number(buyingCost),
+//         sellingPrice: Number(sellingPrice),
+//       }),
+//     });
+
+//     const data = await response.json();
+
+//     console.log("Success:", data);
+
+//     // clear form
+//     setName("");
+//     setBarcode("");
+//     setBuyingCost("");
+//     setSellingPrice("");
+
+//     // ✅ SUCCESS TOAST
+//     Toast.show({
+//       type: "success",
+//       text1: "Success",
+//       text2: "Product added successfully ✅",
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+
+//     // ❌ ERROR TOAST
+//     Toast.show({
+//       type: "error",
+//       text1: "Error",
+//       text2: "Failed to add product ❌",
+//     });
+//   }
+// };
+
+const handleAddProduct = async () => {
+
+  // ✅ VALIDATION
+  if (!name || !barcode || !buyingCost || !sellingPrice) {
+    Toast.show({
+      type: "error",
+      text1: "Required Fields",
+      text2: "Please fill all fields",
+      visibilityTime: 3000, // 3 seconds
+    });
+    return; // ❌ STOP API CALL
+  }
+
+  try {
+    const response = await fetch("http://10.119.88.215:8000/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        barcode,
+        buyingCost: Number(buyingCost),
+        sellingPrice: Number(sellingPrice),
+      }),
+    });
+
+    const data = await response.json();
+
+    // ✅ SUCCESS TOAST
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: "Product added successfully",
+      visibilityTime: 3000,
+    });
+
+    // clear form
+    setName("");
+    setBarcode("");
+    setBuyingCost("");
+    setSellingPrice("");
+
+  } catch (error) {
+    console.log(error);
+
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Failed to add product",
+      visibilityTime: 3000,
+    });
+  }
+};
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -45,7 +149,13 @@ export default function AddItemScreen() {
       >
         {/* BASIC INFO */}
         <Section title="Basic Information">
-          <Input label="Item name" placeholder="e.g. Organic Milk 1L" />
+<Input
+  label={<Text style={{ color: "red" }}>Item name</Text>}
+  placeholder="e.g. Organic Milk 1L"
+  value={name}
+  onChangeText={setName}
+/>
+
           <TextArea
             label="Description"
             placeholder="Add details about the product..."
@@ -54,11 +164,13 @@ export default function AddItemScreen() {
           <View>
             <Label>Barcode</Label>
             <View style={styles.barcodeBox}>
-              <TextInput
-                style={[styles.input, { flex: 1, borderRightWidth: 0 }]}
-                placeholder="Scan or enter code"
-                placeholderTextColor={SUBTLE}
-              />
+            <TextInput
+  style={[styles.input, { flex: 1, borderRightWidth: 0 }]}
+  placeholder="Scan or enter code"
+  placeholderTextColor={SUBTLE}
+  value={barcode}
+  onChangeText={setBarcode}
+/>
             </View>
           </View>
         </Section>
@@ -66,17 +178,21 @@ export default function AddItemScreen() {
         {/* PRICING */}
         <Section title="Pricing Details" bg>
           <Row>
-            <Input
-              label="Buying cost"
-              placeholder="0.00"
-              keyboardType="numeric"
-            />
-            <Input
-              label="Selling price"
-              placeholder="0.00"
-              keyboardType="numeric"
-              bold
-            />
+ <Input
+  label={<Text style={{ color: "red" }}>Buying cost</Text>}
+  placeholder="0.00"
+  keyboardType="numeric"
+  value={buyingCost}
+  onChangeText={setBuyingCost}
+/>
+<Input
+  label={<Text style={{ color: "red" }}>Selling price</Text>}
+  placeholder="0.00"
+  keyboardType="numeric"
+  bold
+  value={sellingPrice}
+  onChangeText={setSellingPrice}
+/>
           </Row>
           <Input
             label="Offer price (Optional)"
@@ -109,10 +225,12 @@ export default function AddItemScreen() {
       </ScrollView>
 
       {/* FIXED BOTTOM BUTTON */}
-      <TouchableOpacity style={styles.addBtn}>
+<TouchableOpacity style={styles.addBtn} onPress={handleAddProduct}>
         <FontAwesome5 name="plus-circle" size={20} color="#fff" />
         <Text style={styles.addBtnText}>Add Item</Text>
       </TouchableOpacity>
+      <Toast position="top" topOffset={50} />
+
     </SafeAreaView>
   );
 }

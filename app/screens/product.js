@@ -3,7 +3,6 @@ import { useState } from "react";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 import {
-  Image,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -28,9 +27,7 @@ const productsData = [
     category: "Electronics",
     price: "$99.99",
     stock: 58,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCpGIto_qU06I6eGIeUVKfm-oCtUs-0ARASSrfEyMHAIpa3mETdRvDxoYo8FDpZBNfvDnf3J5ozBIZCznUKc-eMM0Q-m-_ZlKO9kyy-k9JhBxuvpxIl39OUrDH7XvrK0t5wmIpyww9C1Jl5ot1f1zah_Ye0kpzLjQqbvkKUE4PQYBWJGzBBagbB556iHmhpDUGBkBw8DiA236nw73A9G0hB7U5FHQOY_TJ4IeS5C4X82IKstaCrYas5FZ4Siv1v3CQtS8WGM1GDnsBr",
-  },
+    },
   {
     id: 2,
     code: "SMTW",
@@ -39,9 +36,7 @@ const productsData = [
     category: "Electronics",
     price: "$199.99",
     stock: 32,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBMpRQJJmTgRt2_QLBcwRbHS_vABciF_BJyW5S_rCAD7sgf3WRdYRoctMUNQjw6O4uyfqGNoa3FAduY7i4HyYSEn6CE2oRu9ijdcXhCrhM7PCJQs1O7fXrvz3h3Hi5EEP4bGzS19B_DdL5dP4ijryHPaJy7qEldu-8wsB-9dbTCLmr1ZHH1TDc1biYyPA6ggqBarot9yKPjZrrHepqgFulu42JwKbOHSU2pxlvtn_kGCSBHMrMvbW-vXWICF_IJlTzGSyh1_NO4352f",
-  },
+   },
   {
     id: 3,
     code: "BSPK",
@@ -50,9 +45,7 @@ const productsData = [
     category: "Electronics",
     price: "$49.99",
     stock: 120,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuD1N37MrPl81XtVaNuxJNrLOyZta6TGnIcKMvNU1miYbpcvaETBYqjoUh1oZ1NvFK3E1Fv1rDK0WmIgYJosY4JMIeOC7knf_aBOZGfCGUapsi3VkUZ_SFU6LHzlVqVki9DLKZFcML9xCcaZlg-PBtzLZHuePJrgQdV7OP49Obn7q4OtXhvqq-x4U6IgoVU6aEW31VstTZICeHtTR1M_BDjaPoCb9EB94jMH7BdFSwEbl1SQNG-foSwOyU0HcIqgKPkaOuLlQqZOG5CJ",
-  },
+   },
   {
     id: 4,
     code: "PCHG",
@@ -61,9 +54,7 @@ const productsData = [
     category: "Electronics",
     price: "$29.99",
     stock: 95,
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuD-bQAoA0maUeg3hVOr6EJsx865iLuctnukyibkreZW8sJNCO9vcFLpGTBHrMPv3qUahZxkZlBOPRw35o4KYY9280WQ9CJZHqh4lHM7UpOjr1CshcRIHff3JBDP0Lf0x3WT2fG6PoAga6YQ1BJuPMDfbyD6EsoV6pzIxseAVIeWb3CDwI_kftWyV6ZAoMhRHEZ4MWIt_aAMDkS8Oh0mkVEZpgBhWcIIwUzggiK2PNMEtZTUMCbMhHSM5d0PNL8R4BLqx9NHPZLxj2_m",
-  },
+   },
   {
     id: 5,
     code: "SMTR",
@@ -72,9 +63,7 @@ const productsData = [
     category: "Wearables",
     price: "$79.99",
     stock: 45,
-    image:
-    "https://images.unsplash.com/photo-1576243345690-4e4b79b63288?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
+   },
   {
     id: 6,
     code: "GGM",
@@ -83,9 +72,7 @@ const productsData = [
     category: "Electronics",
     price: "$59.99",
     stock: 75,
-    image:
-    "https://images.unsplash.com/photo-1613141412501-9012977f1969?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
+   },
   {
     id: 7,
     code: "LPSTD",
@@ -94,9 +81,7 @@ const productsData = [
     category: "Accessories",
     price: "$34.99",
     stock: 60,
-    image:
-    "https://images.unsplash.com/photo-1623251606108-512c7c4a3507?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
+     },
   {
     id: 8,
     code: "670",
@@ -104,9 +89,7 @@ const productsData = [
     category: "Home & Office",
     price: "$24.99",
     stock: 90,
-    image:
-    "https://images.unsplash.com/photo-1621447980929-6638614633c8?q=80&w=736&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
+    },
   {
     id: 9,
     code: "879",
@@ -115,9 +98,7 @@ const productsData = [
     category: "Electronics",
     price: "$49.99",
     stock: 50,
-    image:
-    "https://images.unsplash.com/photo-1722710386521-887b9b9e88f4?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  },
+    },
   {
     id: 10,
     code: "431",
@@ -126,8 +107,7 @@ const productsData = [
     category: "Electronics",
     price: "$149.99",
     stock: 28,
-    image:
-    "https://images.unsplash.com/photo-1685615359827-aa31d97578e7?q=80&w=1122&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+   
   },
   // add other products...
 ];
@@ -197,16 +177,11 @@ const handleSearch = (text) => {
     <ScrollView style={styles.productList}>
         {filteredProducts.map((product) => (
           <TouchableOpacity key={product.id} style={styles.productCard}>
-            <Image
-              source={{ uri: product.image }}
-              style={styles.productImage}
-            />
-            <View style={styles.productInfo}>
-              <Text style={styles.productName}>
-                {product.name} 
-              </Text>
-              <Text style={styles.productCategory}>{product.category}</Text>
-            </View>
+      {/* LEFT SIDE */}
+  <View style={styles.leftSection}>
+    <Text style={styles.productName}>{product.name}</Text>
+    <Text style={styles.productCategory}>{product.category}</Text>
+  </View>
          
             <View style={styles.rightSection}>
   <View style={styles.productPriceWrapper}>
@@ -339,11 +314,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#d6d6d6",
   },
 
-  productImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 12,
-  },
+ 
   productInfo: {
     flex: 1,
     marginLeft: 16,
@@ -414,5 +385,8 @@ menuTextRed: {
   color: "red",
   fontSize: 16,
 },
-
+leftSection: {
+  flex: 1,
+  justifyContent: "center",
+},
 });
