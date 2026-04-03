@@ -28,137 +28,80 @@ export default function AddItemScreen() {
   const [buyingCost, setBuyingCost] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
   const [errors, setErrors] = useState({});
-const [offerPrice, setOfferPrice] = useState("");
+  const [offerPrice, setOfferPrice] = useState("");
+  const [taxCode, setTaxCode] = useState("");
+  const [taxPercentage, setTaxPercentage] = useState("");
 
-
-  // const handleAddProduct = async () => {
-  //   let newErrors = {};
-
-  //   if (!name) newErrors.name = "Please fill this field";
-  //   if (!barcode) newErrors.barcode = "Please fill this field";
-  //   if (!buyingCost) newErrors.buyingCost = "Please fill this field";
-  //   if (!sellingPrice) newErrors.sellingPrice = "Please fill this field";
-
-  //   setErrors(newErrors);
-
-  //   // ❌ STOP API if errors
-  //   if (Object.keys(newErrors).length > 0) {
-  //     return;
-  //   }
-
-  //   try {
-  //      // ✅ add offerPrice only if exists
-  //   if (offerPrice) {
-  //     bodyData.offerPrice = Number(offerPrice);
-  //   }
-  //     const response = await fetch("http://10.158.9.215:8000/products", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-        
-  //       body: JSON.stringify({
-  //         name,
-  //         barcode,
-  //         buyingCost: Number(buyingCost),
-  //         sellingPrice: Number(sellingPrice),
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-
-  //     // ✅ SUCCESS TOAST only
-  //     Toast.show({
-  //       type: "success",
-  //       text1: "Success",
-  //       text2: "Product added successfully",
-  //       visibilityTime: 3000,
-  //     });
-
-  //     // clear form
-  //     setName("");
-  //     setBarcode("");
-  //     setBuyingCost("");
-  //     setSellingPrice("");
-  //       setOfferPrice("");
-  //     setErrors({});
-  //   } catch (error) {
-  //     console.log(error);
-
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Error",
-  //       text2: "Failed to add product",
-  //       visibilityTime: 3000,
-  //     });
-  //   }
-  // };
-  
-  
   const handleAddProduct = async () => {
-  let newErrors = {};
+    let newErrors = {};
 
-  if (!name) newErrors.name = "Please fill this field";
-  if (!barcode) newErrors.barcode = "Please fill this field";
-  if (!buyingCost) newErrors.buyingCost = "Please fill this field";
-  if (!sellingPrice) newErrors.sellingPrice = "Please fill this field";
+    if (!name) newErrors.name = "Please fill this field";
+    if (!barcode) newErrors.barcode = "Please fill this field";
+    if (!buyingCost) newErrors.buyingCost = "Please fill this field";
+    if (!sellingPrice) newErrors.sellingPrice = "Please fill this field";
 
-  setErrors(newErrors);
+    setErrors(newErrors);
 
-  if (Object.keys(newErrors).length > 0) {
-    return;
-  }
-
-  try {
-    // ✅ create body object
-    const bodyData = {
-      name,
-      barcode,
-      buyingCost: Number(buyingCost),
-      sellingPrice: Number(sellingPrice),
-    };
-
-    // ✅ add offerPrice only if exists
-    if (offerPrice) {
-      bodyData.offerPrice = Number(offerPrice);
+    if (Object.keys(newErrors).length > 0) {
+      return;
     }
 
-    const response = await fetch("http://10.158.9.215:8000/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyData),
-    });
+    try {
+      // ✅ create body object
+      const bodyData = {
+        name,
+        barcode,
+        buyingCost: Number(buyingCost),
+        sellingPrice: Number(sellingPrice),
+      };
 
-    const data = await response.json();
+      // ✅ add offerPrice only if exists
+      if (offerPrice) {
+        bodyData.offerPrice = Number(offerPrice);
+      }
+      if (taxCode) {
+        bodyData.taxCode = taxCode;
+      }
+      if (taxPercentage) {
+        bodyData.taxPercentage = taxPercentage;
+      }
+      const response = await fetch("http://10.158.9.215:8000/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      });
 
-    Toast.show({
-      type: "success",
-      text1: "Success",
-      text2: "Product added successfully",
-      visibilityTime: 3000,
-    });
+      const data = await response.json();
 
-    // clear form
-    setName("");
-    setBarcode("");
-    setBuyingCost("");
-    setSellingPrice("");
-    setOfferPrice(""); // ✅ clear this also
-    setErrors({});
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Product added successfully",
+        visibilityTime: 3000,
+      });
 
-  } catch (error) {
-    console.log(error);
+      // clear form
+      setName("");
+      setBarcode("");
+      setBuyingCost("");
+      setSellingPrice("");
+      setOfferPrice(""); // ✅ clear this also
+      setTaxPercentage("");
+      setTaxCode("");
+      setErrors({});
+    } catch (error) {
+      console.log(error);
 
-    Toast.show({
-      type: "error",
-      text1: "Error",
-      text2: "Failed to add product",
-      visibilityTime: 3000,
-    });
-  }
-};
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to add product",
+        visibilityTime: 3000,
+      });
+    }
+  };
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -267,19 +210,30 @@ const [offerPrice, setOfferPrice] = useState("");
             </View>
           </Row>
           <Input
-          label="Offer price (Optional)"
-  placeholder="0.00"
-  keyboardType="numeric"
-  value={offerPrice}
-  onChangeText={setOfferPrice}
+            label="Offer price (Optional)"
+            placeholder="0.00"
+            keyboardType="numeric"
+            value={offerPrice}
+            onChangeText={setOfferPrice}
           />
         </Section>
 
         {/* TAX */}
         <Section title="Tax Information">
           <Row>
-            <Input label="Tax code" placeholder="e.g. VAT-01" />
-            <Input label="Tax (%)" placeholder="0" keyboardType="numeric" />
+            <Input
+              label="Tax code"
+              placeholder="e.g. VAT-01"
+              value={taxCode}
+              onChangeText={setTaxCode}
+            />
+            <Input
+              label="Tax (%)"
+              placeholder="0"
+              keyboardType="numeric"
+              value={taxPercentage}
+              onChangeText={setTaxPercentage}
+            />
           </Row>
 
           <View style={styles.row}>
