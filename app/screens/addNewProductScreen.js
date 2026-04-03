@@ -28,26 +28,35 @@ export default function AddItemScreen() {
   const [buyingCost, setBuyingCost] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
   const [errors, setErrors] = useState({});
+const [offerPrice, setOfferPrice] = useState("");
+
 
   // const handleAddProduct = async () => {
+  //   let newErrors = {};
 
-  //   // ✅ VALIDATION
-  //   if (!name || !barcode || !buyingCost || !sellingPrice) {
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Required Fields",
-  //       text2: "Please fill all fields",
-  //       visibilityTime: 3000, // 3 seconds
-  //     });
-  //     return; // ❌ STOP API CALL
+  //   if (!name) newErrors.name = "Please fill this field";
+  //   if (!barcode) newErrors.barcode = "Please fill this field";
+  //   if (!buyingCost) newErrors.buyingCost = "Please fill this field";
+  //   if (!sellingPrice) newErrors.sellingPrice = "Please fill this field";
+
+  //   setErrors(newErrors);
+
+  //   // ❌ STOP API if errors
+  //   if (Object.keys(newErrors).length > 0) {
+  //     return;
   //   }
 
   //   try {
+  //      // ✅ add offerPrice only if exists
+  //   if (offerPrice) {
+  //     bodyData.offerPrice = Number(offerPrice);
+  //   }
   //     const response = await fetch("http://10.158.9.215:8000/products", {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
   //       },
+        
   //       body: JSON.stringify({
   //         name,
   //         barcode,
@@ -58,7 +67,7 @@ export default function AddItemScreen() {
 
   //     const data = await response.json();
 
-  //     // ✅ SUCCESS TOAST
+  //     // ✅ SUCCESS TOAST only
   //     Toast.show({
   //       type: "success",
   //       text1: "Success",
@@ -71,7 +80,8 @@ export default function AddItemScreen() {
   //     setBarcode("");
   //     setBuyingCost("");
   //     setSellingPrice("");
-
+  //       setOfferPrice("");
+  //     setErrors({});
   //   } catch (error) {
   //     console.log(error);
 
@@ -83,63 +93,72 @@ export default function AddItemScreen() {
   //     });
   //   }
   // };
-
+  
+  
   const handleAddProduct = async () => {
-    let newErrors = {};
+  let newErrors = {};
 
-    if (!name) newErrors.name = "Please fill this field";
-    if (!barcode) newErrors.barcode = "Please fill this field";
-    if (!buyingCost) newErrors.buyingCost = "Please fill this field";
-    if (!sellingPrice) newErrors.sellingPrice = "Please fill this field";
+  if (!name) newErrors.name = "Please fill this field";
+  if (!barcode) newErrors.barcode = "Please fill this field";
+  if (!buyingCost) newErrors.buyingCost = "Please fill this field";
+  if (!sellingPrice) newErrors.sellingPrice = "Please fill this field";
 
-    setErrors(newErrors);
+  setErrors(newErrors);
 
-    // ❌ STOP API if errors
-    if (Object.keys(newErrors).length > 0) {
-      return;
+  if (Object.keys(newErrors).length > 0) {
+    return;
+  }
+
+  try {
+    // ✅ create body object
+    const bodyData = {
+      name,
+      barcode,
+      buyingCost: Number(buyingCost),
+      sellingPrice: Number(sellingPrice),
+    };
+
+    // ✅ add offerPrice only if exists
+    if (offerPrice) {
+      bodyData.offerPrice = Number(offerPrice);
     }
 
-    try {
-      const response = await fetch("http://10.158.9.215:8000/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          barcode,
-          buyingCost: Number(buyingCost),
-          sellingPrice: Number(sellingPrice),
-        }),
-      });
+    const response = await fetch("http://10.158.9.215:8000/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodyData),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      // ✅ SUCCESS TOAST only
-      Toast.show({
-        type: "success",
-        text1: "Success",
-        text2: "Product added successfully",
-        visibilityTime: 3000,
-      });
+    Toast.show({
+      type: "success",
+      text1: "Success",
+      text2: "Product added successfully",
+      visibilityTime: 3000,
+    });
 
-      // clear form
-      setName("");
-      setBarcode("");
-      setBuyingCost("");
-      setSellingPrice("");
-      setErrors({});
-    } catch (error) {
-      console.log(error);
+    // clear form
+    setName("");
+    setBarcode("");
+    setBuyingCost("");
+    setSellingPrice("");
+    setOfferPrice(""); // ✅ clear this also
+    setErrors({});
 
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Failed to add product",
-        visibilityTime: 3000,
-      });
-    }
-  };
+  } catch (error) {
+    console.log(error);
+
+    Toast.show({
+      type: "error",
+      text1: "Error",
+      text2: "Failed to add product",
+      visibilityTime: 3000,
+    });
+  }
+};
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -221,7 +240,6 @@ export default function AddItemScreen() {
               label={<Text style={{ color: "red" }}>Selling price</Text>}
               placeholder="0.00"
               keyboardType="numeric"
-              bold
               value={sellingPrice}
               onChangeText={(text) => {
                 setSellingPrice(text);
@@ -249,9 +267,11 @@ export default function AddItemScreen() {
             </View>
           </Row>
           <Input
-            label="Offer price (Optional)"
-            placeholder="0.00"
-            keyboardType="numeric"
+          label="Offer price (Optional)"
+  placeholder="0.00"
+  keyboardType="numeric"
+  value={offerPrice}
+  onChangeText={setOfferPrice}
           />
         </Section>
 
