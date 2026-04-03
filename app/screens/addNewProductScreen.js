@@ -22,112 +22,124 @@ const TEXT = "#111827";
 const SUBTLE = "#6b7280";
 
 export default function AddItemScreen() {
-
-
   const navigation = useNavigation();
-const [name, setName] = useState("");
-const [barcode, setBarcode] = useState("");
-const [buyingCost, setBuyingCost] = useState("");
-const [sellingPrice, setSellingPrice] = useState("");
+  const [name, setName] = useState("");
+  const [barcode, setBarcode] = useState("");
+  const [buyingCost, setBuyingCost] = useState("");
+  const [sellingPrice, setSellingPrice] = useState("");
+  const [errors, setErrors] = useState({});
 
-// const handleAddProduct = async () => {
-//   try {
-//     const response = await fetch("http://10.119.88.215:8000/products", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         name,
-//         barcode,
-//         buyingCost: Number(buyingCost),
-//         sellingPrice: Number(sellingPrice),
-//       }),
-//     });
+  // const handleAddProduct = async () => {
 
-//     const data = await response.json();
+  //   // ✅ VALIDATION
+  //   if (!name || !barcode || !buyingCost || !sellingPrice) {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Required Fields",
+  //       text2: "Please fill all fields",
+  //       visibilityTime: 3000, // 3 seconds
+  //     });
+  //     return; // ❌ STOP API CALL
+  //   }
 
-//     console.log("Success:", data);
+  //   try {
+  //     const response = await fetch("http://10.158.9.215:8000/products", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         name,
+  //         barcode,
+  //         buyingCost: Number(buyingCost),
+  //         sellingPrice: Number(sellingPrice),
+  //       }),
+  //     });
 
-//     // clear form
-//     setName("");
-//     setBarcode("");
-//     setBuyingCost("");
-//     setSellingPrice("");
+  //     const data = await response.json();
 
-//     // ✅ SUCCESS TOAST
-//     Toast.show({
-//       type: "success",
-//       text1: "Success",
-//       text2: "Product added successfully ✅",
-//     });
+  //     // ✅ SUCCESS TOAST
+  //     Toast.show({
+  //       type: "success",
+  //       text1: "Success",
+  //       text2: "Product added successfully",
+  //       visibilityTime: 3000,
+  //     });
 
-//   } catch (error) {
-//     console.log(error);
+  //     // clear form
+  //     setName("");
+  //     setBarcode("");
+  //     setBuyingCost("");
+  //     setSellingPrice("");
 
-//     // ❌ ERROR TOAST
-//     Toast.show({
-//       type: "error",
-//       text1: "Error",
-//       text2: "Failed to add product ❌",
-//     });
-//   }
-// };
+  //   } catch (error) {
+  //     console.log(error);
 
-const handleAddProduct = async () => {
+  //     Toast.show({
+  //       type: "error",
+  //       text1: "Error",
+  //       text2: "Failed to add product",
+  //       visibilityTime: 3000,
+  //     });
+  //   }
+  // };
 
-  // ✅ VALIDATION
-  if (!name || !barcode || !buyingCost || !sellingPrice) {
-    Toast.show({
-      type: "error",
-      text1: "Required Fields",
-      text2: "Please fill all fields",
-      visibilityTime: 3000, // 3 seconds
-    });
-    return; // ❌ STOP API CALL
-  }
+  const handleAddProduct = async () => {
+    let newErrors = {};
 
-  try {
-    const response = await fetch("http://10.119.88.215:8000/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        barcode,
-        buyingCost: Number(buyingCost),
-        sellingPrice: Number(sellingPrice),
-      }),
-    });
+    if (!name) newErrors.name = "Please fill this field";
+    if (!barcode) newErrors.barcode = "Please fill this field";
+    if (!buyingCost) newErrors.buyingCost = "Please fill this field";
+    if (!sellingPrice) newErrors.sellingPrice = "Please fill this field";
 
-    const data = await response.json();
+    setErrors(newErrors);
 
-    // ✅ SUCCESS TOAST
-    Toast.show({
-      type: "success",
-      text1: "Success",
-      text2: "Product added successfully",
-      visibilityTime: 3000,
-    });
+    // ❌ STOP API if errors
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
 
-    // clear form
-    setName("");
-    setBarcode("");
-    setBuyingCost("");
-    setSellingPrice("");
+    try {
+      const response = await fetch("http://10.158.9.215:8000/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          barcode,
+          buyingCost: Number(buyingCost),
+          sellingPrice: Number(sellingPrice),
+        }),
+      });
 
-  } catch (error) {
-    console.log(error);
+      const data = await response.json();
 
-    Toast.show({
-      type: "error",
-      text1: "Error",
-      text2: "Failed to add product",
-      visibilityTime: 3000,
-    });
-  }
-};
+      // ✅ SUCCESS TOAST only
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Product added successfully",
+        visibilityTime: 3000,
+      });
+
+      // clear form
+      setName("");
+      setBarcode("");
+      setBuyingCost("");
+      setSellingPrice("");
+      setErrors({});
+    } catch (error) {
+      console.log(error);
+
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to add product",
+        visibilityTime: 3000,
+      });
+    }
+  };
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -149,12 +161,21 @@ const handleAddProduct = async () => {
       >
         {/* BASIC INFO */}
         <Section title="Basic Information">
-<Input
-  label={<Text style={{ color: "red" }}>Item name</Text>}
-  placeholder="e.g. Organic Milk 1L"
-  value={name}
-  onChangeText={setName}
-/>
+          <Input
+            label={<Text style={{ color: "red" }}>Item name</Text>}
+            placeholder="e.g. Organic Milk 1L"
+            value={name}
+            onChangeText={(text) => {
+              setName(text);
+              setErrors({ ...errors, name: "" });
+            }}
+          />
+
+          {errors.name && (
+            <Text style={{ color: "red", fontSize: 12, bottom: 10 }}>
+              {errors.name}
+            </Text>
+          )}
 
           <TextArea
             label="Description"
@@ -162,37 +183,70 @@ const handleAddProduct = async () => {
           />
 
           <View>
-            <Label>Barcode</Label>
-            <View style={styles.barcodeBox}>
+            <Text style={{ color: "red", fontSize: 14 }}>Barcode</Text>
             <TextInput
-  style={[styles.input, { flex: 1, borderRightWidth: 0 }]}
-  placeholder="Scan or enter code"
-  placeholderTextColor={SUBTLE}
-  value={barcode}
-  onChangeText={setBarcode}
-/>
-            </View>
+              style={[styles.input, { flex: 1, borderRightWidth: 0 }]}
+              placeholder="Scan or enter code"
+              placeholderTextColor={SUBTLE}
+              value={barcode}
+              onChangeText={(text) => {
+                setBarcode(text);
+                setErrors({ ...errors, barcode: "" });
+              }}
+            />
+
+            {errors.barcode && (
+              <Text style={{ color: "red", fontSize: 12, bottom: 10 }}>
+                {errors.barcode}
+              </Text>
+            )}
           </View>
         </Section>
 
         {/* PRICING */}
         <Section title="Pricing Details" bg>
           <Row>
- <Input
-  label={<Text style={{ color: "red" }}>Buying cost</Text>}
-  placeholder="0.00"
-  keyboardType="numeric"
-  value={buyingCost}
-  onChangeText={setBuyingCost}
-/>
-<Input
-  label={<Text style={{ color: "red" }}>Selling price</Text>}
-  placeholder="0.00"
-  keyboardType="numeric"
-  bold
-  value={sellingPrice}
-  onChangeText={setSellingPrice}
-/>
+            <Input
+              label={<Text style={{ color: "red" }}>Buying cost</Text>}
+              placeholder="0.00"
+              keyboardType="numeric"
+              value={buyingCost}
+              onChangeText={(text) => {
+                setBuyingCost(text);
+                setErrors({ ...errors, buyingCost: "" });
+              }}
+            />
+
+            <Input
+              label={<Text style={{ color: "red" }}>Selling price</Text>}
+              placeholder="0.00"
+              keyboardType="numeric"
+              bold
+              value={sellingPrice}
+              onChangeText={(text) => {
+                setSellingPrice(text);
+                setErrors({ ...errors, sellingPrice: "" });
+              }}
+            />
+          </Row>
+
+          {/* Error Row */}
+          <Row style={{ marginTop: 4 }}>
+            <View style={{ flex: 1, bottom: 10 }}>
+              {errors.buyingCost && (
+                <Text style={{ color: "red", fontSize: 12 }}>
+                  {errors.buyingCost}
+                </Text>
+              )}
+            </View>
+
+            <View style={{ flex: 1, alignItems: "flex-end", bottom: 10 }}>
+              {errors.sellingPrice && (
+                <Text style={{ color: "red", fontSize: 12 }}>
+                  {errors.sellingPrice}
+                </Text>
+              )}
+            </View>
           </Row>
           <Input
             label="Offer price (Optional)"
@@ -216,7 +270,7 @@ const handleAddProduct = async () => {
             </Select>
 
             <Select label="Tax type (Selling)">
-             <Picker.Item label="Select location" value="Exclusive" />
+              <Picker.Item label="Select location" value="Exclusive" />
               <Picker.Item label="Inclusive" value="Inclusive" />
               <Picker.Item label="Exclusive" value="Exclusive" />
             </Select>
@@ -225,12 +279,11 @@ const handleAddProduct = async () => {
       </ScrollView>
 
       {/* FIXED BOTTOM BUTTON */}
-<TouchableOpacity style={styles.addBtn} onPress={handleAddProduct}>
+      <TouchableOpacity style={styles.addBtn} onPress={handleAddProduct}>
         <FontAwesome5 name="plus-circle" size={20} color="#fff" />
         <Text style={styles.addBtnText}>Add Item</Text>
       </TouchableOpacity>
       <Toast position="top" topOffset={50} />
-
     </SafeAreaView>
   );
 }
