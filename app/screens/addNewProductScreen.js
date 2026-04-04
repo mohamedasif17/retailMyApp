@@ -16,7 +16,6 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const PRIMARY = "#1193d4";
 const BG = "#f6f7f8";
-const CARD = "#ffffff";
 const BORDER = "#e5e7eb";
 const TEXT = "#111827";
 const SUBTLE = "#6b7280";
@@ -31,6 +30,8 @@ export default function AddItemScreen() {
   const [offerPrice, setOfferPrice] = useState("");
   const [taxCode, setTaxCode] = useState("");
   const [taxPercentage, setTaxPercentage] = useState("");
+  const [buyTaxType, setBuyTaxType] = useState("");
+  const [sellTaxType, setSellTaxType] = useState("");
 
   const handleAddProduct = async () => {
     let newErrors = {};
@@ -166,7 +167,7 @@ export default function AddItemScreen() {
         </Section>
 
         {/* PRICING */}
-        <Section title="Pricing Details" bg>
+        <Section title="Pricing Details">
           <Row>
             <Input
               label={<Text style={{ color: "red" }}>Buying cost</Text>}
@@ -232,23 +233,50 @@ export default function AddItemScreen() {
               placeholder="0"
               keyboardType="numeric"
               value={taxPercentage}
-              onChangeText={setTaxPercentage}
+              onChangeText={(text) => {
+                setTaxPercentage(text);
+
+                if (!text) {
+                  setBuyTaxType("");
+                  setSellTaxType("");
+                }
+              }}
             />
           </Row>
 
-          <View style={styles.row}>
-            <Select label="Tax type (Buying)">
-              <Picker.Item label="Select location" value="Exclusive" />
-              <Picker.Item label="Inclusive" value="Inclusive" />
-              <Picker.Item label="Exclusive" value="Exclusive" />
-            </Select>
+          {taxPercentage ? (
+            <View style={styles.row}>
+              {/* Buying Tax */}
+              <View style={{ flex: 1 }}>
+                <Text style={styles.label}>Tax type (Buying)</Text>
+                <View style={styles.select}>
+                  <Picker
+                    selectedValue={buyTaxType}
+                    onValueChange={(itemValue) => setBuyTaxType(itemValue)}
+                  >
+                    <Picker.Item label="Select type" value="" />
+                    <Picker.Item label="Including" value="Including" />
+                    <Picker.Item label="Excluding" value="Excluding" />
+                  </Picker>
+                </View>
+              </View>
 
-            <Select label="Tax type (Selling)">
-              <Picker.Item label="Select location" value="Exclusive" />
-              <Picker.Item label="Inclusive" value="Inclusive" />
-              <Picker.Item label="Exclusive" value="Exclusive" />
-            </Select>
-          </View>
+              {/* Selling Tax */}
+              <View style={{ flex: 1 }}>
+                <Text style={styles.label}>Tax type (Selling)</Text>
+                <View style={styles.select}>
+                  <Picker
+                    selectedValue={sellTaxType}
+                    onValueChange={(itemValue) => setSellTaxType(itemValue)}
+                  >
+                    <Picker.Item label="Select type" value="" />
+                    <Picker.Item label="Including" value="Including" />
+                    <Picker.Item label="Excluding" value="Excluding" />
+                  </Picker>
+                </View>
+              </View>
+            </View>
+          ) : null}
         </Section>
       </ScrollView>
 
@@ -300,18 +328,6 @@ function TextArea({ label, ...props }) {
         placeholderTextColor={SUBTLE}
         {...props}
       />
-    </View>
-  );
-}
-
-function Select({ label, value }) {
-  return (
-    <View style={{ flex: 1 }}>
-      <Label>{label}</Label>
-      <TouchableOpacity style={styles.select}>
-        <Text style={styles.selectText}>{value}</Text>
-        <FontAwesome5 name="chevron-down" size={14} color={SUBTLE} />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -405,12 +421,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: BORDER,
     borderRadius: 10,
-    paddingHorizontal: 12,
     backgroundColor: "#fff",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 14,
+    justifyContent: "center",
   },
 
   selectText: {
