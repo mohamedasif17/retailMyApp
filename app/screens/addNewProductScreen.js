@@ -163,6 +163,12 @@ export default function AddItemScreen() {
                 {errors.barcode}
               </Text>
             )}
+
+           <Input
+            label="Stocks"
+            placeholder="0.00"
+            keyboardType="numeric"
+          />
           </View>
         </Section>
 
