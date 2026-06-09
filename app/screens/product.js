@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 import {
@@ -9,7 +9,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import {
   Menu,
@@ -18,224 +18,150 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 
-const productsData = [
-  {
-    id: 1,
-    code: "205", // POS shortcut code
-
-    name: "Wireless Headphones",
-    category: "Electronics",
-    price: "$99.99",
-    stock: 58,
-    },
-  {
-    id: 2,
-    code: "SMTW",
-
-    name: "Smartwatch",
-    category: "Electronics",
-    price: "$199.99",
-    stock: 32,
-   },
-  {
-    id: 3,
-    code: "BSPK",
-
-    name: "Bluetooth Speaker",
-    category: "Electronics",
-    price: "$49.99",
-    stock: 120,
-   },
-  {
-    id: 4,
-    code: "PCHG",
-
-    name: "Portable Charger",
-    category: "Electronics",
-    price: "$29.99",
-    stock: 95,
-   },
-  {
-    id: 5,
-    code: "SMTR",
-
-    name: "Fitness Tracker",
-    category: "Wearables",
-    price: "$79.99",
-    stock: 45,
-   },
-  {
-    id: 6,
-    code: "GGM",
-
-    name: "Gaming Mouse",
-    category: "Electronics",
-    price: "$59.99",
-    stock: 75,
-   },
-  {
-    id: 7,
-    code: "LPSTD",
-
-    name: "Laptop Stand",
-    category: "Accessories",
-    price: "$34.99",
-    stock: 60,
-     },
-  {
-    id: 8,
-    code: "670",
-    name: "Desk Lamp",
-    category: "Home & Office",
-    price: "$24.99",
-    stock: 90,
-    },
-  {
-    id: 9,
-    code: "879",
-
-    name: "Wireless Keyboard",
-    category: "Electronics",
-    price: "$49.99",
-    stock: 50,
-    },
-  {
-    id: 10,
-    code: "431",
-
-    name: "Action Camera",
-    category: "Electronics",
-    price: "$149.99",
-    stock: 28,
-   
-  },
-  // add other products...
-];
-
 export default function Product() {
-    const [searchText, setSearchText] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState(productsData);
-const navigation = useNavigation();
+  const [searchText, setSearchText] = useState("");
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const navigation = useNavigation();
 
-const handleSearch = (text) => {
-  setSearchText(text);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
-  if (text === "") {
-    setFilteredProducts(productsData);
-  } else {
-    const filtered = productsData.filter(
-      (product) =>
-        product.name.toLowerCase().includes(text.toLowerCase()) ||
-        product.code.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  }
-};
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("http://10.32.64.215:8000/products");
 
-  
+      const data = await response.json();
+
+      setProducts(data);
+      setFilteredProducts(data);
+
+      // console.log("Products:", data);
+    } catch (error) {
+      console.log("API Error:", error);
+      alert(error.message);
+    }
+  };
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+
+    if (text === "") {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter(
+        (product) =>
+          product.name?.toLowerCase().includes(text.toLowerCase()) ||
+          product.code?.toLowerCase().includes(text.toLowerCase())
+      );
+
+      setFilteredProducts(filtered);
+    }
+  };
+
   return (
     <View style={styles.safeContainer}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerTop}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <FontAwesome5 name="bars" size={22} color={"#111"} />
+            </TouchableOpacity>
 
-    <View style={styles.container}>
-          <StatusBar
-        backgroundColor="#ffffff"
-        barStyle="dark-content"
-      />
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-        
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-  <FontAwesome5 name="bars" size={22} color={"#111"} />
-</TouchableOpacity>
+            <Text style={styles.headerTitle}>Products</Text>
+            <View style={{ width: 24 }} />
+          </View>
 
-          <Text style={styles.headerTitle}>Products</Text>
-          <View style={{ width: 24 }} />
+          {/* Search */}
+          <View style={styles.searchWrapper}>
+            <FontAwesome5
+              name="search"
+              size={24}
+              color="#888"
+              style={styles.searchIcon}
+            />
+            <TextInput
+              placeholder="Search by name or code"
+              placeholderTextColor={"#888"}
+              style={styles.searchInput}
+              value={searchText}
+              onChangeText={handleSearch}
+            />
+          </View>
         </View>
 
-        {/* Search */}
-        <View style={styles.searchWrapper}>
-          <FontAwesome5
-            name="search"
-            size={24}
-            color="#888"
-            style={styles.searchIcon}
-          />
-           <TextInput
-        placeholder="Search by name or code"
-        placeholderTextColor={"#888"}
-        style={styles.searchInput}
-        value={searchText}
-        onChangeText={handleSearch}
-      />
-        </View>
+        {/* Product List */}
+        <ScrollView style={styles.productList}>
+          {filteredProducts.map((product) => (
+            <TouchableOpacity key={product._id} style={styles.productCard}>
+              {/* LEFT SIDE */}
+              <View style={styles.leftSection}>
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.productCategory}>{product.categories}</Text>
+              </View>
 
-     
-      </View>
+              <View style={styles.rightSection}>
+                <View style={styles.productPriceWrapper}>
+                  <Text style={styles.productPrice}>
+                    {product.sellingPrice}
+                  </Text>
+                  <Text style={styles.productStock}>
+                    {product.stocks} in stock
+                  </Text>
+                </View>
 
-      {/* Product List */}
-    <ScrollView style={styles.productList}>
-        {filteredProducts.map((product) => (
-          <TouchableOpacity key={product.id} style={styles.productCard}>
-      {/* LEFT SIDE */}
-  <View style={styles.leftSection}>
-    <Text style={styles.productName}>{product.name}</Text>
-    <Text style={styles.productCategory}>{product.category}</Text>
-  </View>
-         
-            <View style={styles.rightSection}>
-  <View style={styles.productPriceWrapper}>
-    <Text style={styles.productPrice}>{product.price}</Text>
-    <Text style={styles.productStock}>{product.stock} in stock</Text>
-  </View>
+                <Menu>
+                  <MenuTrigger>
+                    <FontAwesome5
+                      name="ellipsis-v"
+                      size={18}
+                      color="#111"
+                      style={{ paddingHorizontal: 10, left: 10 }}
+                    />
+                  </MenuTrigger>
 
-  <Menu>
-    <MenuTrigger>
-      <FontAwesome5
-        name="ellipsis-v"
-        size={18}
-        color="#111"
-        style={{ paddingHorizontal: 10, left:10 }}
-      />
-    </MenuTrigger>
+                  <MenuOptions
+                    customStyles={{ optionsContainer: styles.menuOptions }}
+                  >
+                    <MenuOption
+                      onSelect={() => navigation.navigate("AddNewProduct")}
+                    >
+                      <View style={styles.menuItem}>
+                        <FontAwesome5 name="edit" size={16} color="blue" />
+                        <Text style={styles.menuTextBlue}>Edit</Text>
+                      </View>
+                    </MenuOption>
 
-    <MenuOptions customStyles={{ optionsContainer: styles.menuOptions }}>
-<MenuOption
-  onSelect={() => navigation.navigate("AddNewProduct")}
->
-          <View style={styles.menuItem}>
-          <FontAwesome5 name="edit" size={16} color="blue" />
-          <Text style={styles.menuTextBlue}>Edit</Text>
-        </View>
-      </MenuOption>
+                    <MenuOption
+                      onSelect={() => alert("Delete " + product.name)}
+                    >
+                      <View style={styles.menuItem}>
+                        <FontAwesome5 name="trash-alt" size={16} color="red" />
+                        <Text style={styles.menuTextRed}>Delete</Text>
+                      </View>
+                    </MenuOption>
+                  </MenuOptions>
+                </Menu>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
 
-      <MenuOption onSelect={() => alert("Delete " + product.name)}>
-        <View style={styles.menuItem}>
-          <FontAwesome5 name="trash-alt" size={16} color="red" />
-          <Text style={styles.menuTextRed}>Delete</Text>
-        </View>
-      </MenuOption>
-    </MenuOptions>
-  </Menu>
-</View>
-
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      {/* Footer Button */}
-      <View style={styles.footer}>
-<TouchableOpacity
-  style={styles.addButton}
-  onPress={() => navigation.navigate("AddNewProduct")}
->
+        {/* Footer Button */}
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate("AddNewProduct")}
+          >
             <FontAwesome5 name="plus" size={22} color="#fff" />
-          <Text style={styles.addButtonText}>Add New Product</Text>
-        </TouchableOpacity>
+            <Text style={styles.addButtonText}>Add New Product</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
-    </View>
-
   );
 }
 
@@ -314,7 +240,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "#d6d6d6",
   },
 
- 
   productInfo: {
     flex: 1,
     marginLeft: 16,
@@ -359,34 +284,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   rightSection: {
-  flexDirection: "row",
-  alignItems: "center",
-},
+    flexDirection: "row",
+    alignItems: "center",
+  },
 
-menuOptions: {
-  padding: 4,
-  borderRadius: 10,
-},
+  menuOptions: {
+    padding: 4,
+    borderRadius: 10,
+  },
 
-menuItem: {
-  flexDirection: "row",
-  alignItems: "center",
-  padding: 10,
-},
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+  },
 
-menuTextBlue: {
-  marginLeft: 8,
-  color: "blue",
-  fontSize: 16,
-},
+  menuTextBlue: {
+    marginLeft: 8,
+    color: "blue",
+    fontSize: 16,
+  },
 
-menuTextRed: {
-  marginLeft: 8,
-  color: "red",
-  fontSize: 16,
-},
-leftSection: {
-  flex: 1,
-  justifyContent: "center",
-},
+  menuTextRed: {
+    marginLeft: 8,
+    color: "red",
+    fontSize: 16,
+  },
+  leftSection: {
+    flex: 1,
+    justifyContent: "center",
+  },
 });
