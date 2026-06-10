@@ -105,9 +105,9 @@ export default function Product() {
 
               <View style={styles.rightSection}>
                 <View style={styles.productPriceWrapper}>
-                  <Text style={styles.productPrice}>
-                    {product.sellingPrice}
-                  </Text>
+                 <Text style={styles.productPrice}>
+  ₹{product.offerPrice || product.sellingPrice}
+</Text>
                   <Text style={styles.productStock}>
                     {product.stocks} in stock
                   </Text>

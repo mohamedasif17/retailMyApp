@@ -32,127 +32,86 @@ export default function AddItemScreen() {
   const [taxPercentage, setTaxPercentage] = useState("");
   const [buyTaxType, setBuyTaxType] = useState("");
   const [sellTaxType, setSellTaxType] = useState("");
+  const [description, setDescription] = useState("");
+const [stocks, setStocks] = useState("");
+  const handleAddProduct = async () => {
+    let newErrors = {};
 
-//   const handleAddProduct = async () => {
-//     try {
-//       const response = await fetch("http://10.32.64.215:8000/products", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           name: name,
-//           barcode: barcode,
-//           buyingCost: Number(buyingCost),
-//           sellingPrice: Number(sellingPrice),
-//           stocks: 0,
-//         }),
-//       });
+    if (!name.trim()) {
+      newErrors.name = "Please fill this field";
+    }
 
-//       const data = await response.json();
+    if (!barcode.trim()) {
+      newErrors.barcode = "Please fill this field";
+    }
 
-//       if (!response.ok) {
-// Toast.show({
-//   type: "error",
-//   text1: "Error",
-//   text2: data.message,
-//   visibilityTime: 3000,
-// });
-//         return;
-//       }
+    if (!buyingCost.trim()) {
+      newErrors.buyingCost = "Please fill this field";
+    }
 
-// Toast.show({
-//   type: "success",
-//   text1: "Success",
-//   text2: "Product added successfully",
-//   visibilityTime: 3000,
-// });
+    if (!sellingPrice.trim()) {
+      newErrors.sellingPrice = "Please fill this field";
+    }
 
-//       setName("");
-//       setBarcode("");
-//       setBuyingCost("");
-//       setSellingPrice("");
-//     } catch (error) {
-//       console.log(error);
-// Toast.show({
-//   type: "error",
-//   text1: "Error",
-//   text2: "Failed to add product",
-//   visibilityTime: 3000,
-// });
-//     }
-//   };
+    setErrors(newErrors);
 
-const handleAddProduct = async () => {
-  let newErrors = {};
-
-  if (!name.trim()) {
-    newErrors.name = "Please fill this field";
-  }
-
-  if (!barcode.trim()) {
-    newErrors.barcode = "Please fill this field";
-  }
-
-  if (!buyingCost.trim()) {
-    newErrors.buyingCost = "Please fill this field";
-  }
-
-  if (!sellingPrice.trim()) {
-    newErrors.sellingPrice = "Please fill this field";
-  }
-
-  setErrors(newErrors);
-
-  if (Object.keys(newErrors).length > 0) {
-    return;
-  }
-
-  try {
-    const response = await fetch("http://10.32.64.215:8000/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        barcode,
-        buyingCost: Number(buyingCost),
-        sellingPrice: Number(sellingPrice),
-        stocks: 0,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: data.message,
-      });
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
-    Toast.show({
-      type: "success",
-      text1: "Success",
-      text2: "Product added successfully",
-    });
+    try {
+      const response = await fetch("http://10.32.64.215:8000/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
 
-    setName("");
-    setBarcode("");
-    setBuyingCost("");
-    setSellingPrice("");
-    setErrors({});
-  } catch (error) {
-    Toast.show({
-      type: "error",
-      text1: "Error",
-      text2: "Failed to add product",
-    });
-  }
-};
+          barcode,
+          buyingCost: Number(buyingCost),
+          sellingPrice: Number(sellingPrice),
+  stocks: Number(stocks),
+    offerPrice: offerPrice ? Number(offerPrice) : 0,
+
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: data.message,
+        });
+        return;
+      }
+
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Product added successfully",
+      });
+
+      setName("");
+      setDescription("");
+
+      setBarcode("");
+      setBuyingCost("");
+      setSellingPrice("");
+      setStocks("");
+      setOfferPrice("");
+      setErrors({});
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Failed to add product",
+      });
+    }
+  };
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -193,6 +152,8 @@ const handleAddProduct = async () => {
           <TextArea
             label="Description"
             placeholder="Add details about the product..."
+            value={description}
+            onChangeText={setDescription}
           />
 
           <View>
@@ -214,7 +175,22 @@ const handleAddProduct = async () => {
               </Text>
             )}
 
-            <Input label="Stocks" placeholder="0.00" keyboardType="numeric" />
+<Input
+  label="Stocks"
+  placeholder="0.00"
+  keyboardType="numeric"
+  value={stocks}
+  onChangeText={(text) => {
+    setStocks(text);
+    setErrors({ ...errors, stocks: "" });
+  }}
+/>
+
+{errors.stocks && (
+  <Text style={{ color: "red", fontSize: 12 }}>
+    {errors.stocks}
+  </Text>
+)}
           </View>
         </Section>
 
