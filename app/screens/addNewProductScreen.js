@@ -33,7 +33,7 @@ export default function AddItemScreen() {
   const [buyTaxType, setBuyTaxType] = useState("");
   const [sellTaxType, setSellTaxType] = useState("");
   const [description, setDescription] = useState("");
-const [stocks, setStocks] = useState("");
+  const [stocks, setStocks] = useState("");
   const handleAddProduct = async () => {
     let newErrors = {};
 
@@ -72,9 +72,12 @@ const [stocks, setStocks] = useState("");
           barcode,
           buyingCost: Number(buyingCost),
           sellingPrice: Number(sellingPrice),
-  stocks: Number(stocks),
-    offerPrice: offerPrice ? Number(offerPrice) : 0,
-
+          stocks: Number(stocks),
+          offerPrice: offerPrice ? Number(offerPrice) : 0,
+          taxCode,
+          buyTaxType,
+          sellTaxType,
+          taxPercentage: Number(taxPercentage),
         }),
       });
 
@@ -104,6 +107,7 @@ const [stocks, setStocks] = useState("");
       setStocks("");
       setOfferPrice("");
       setErrors({});
+      setTaxCode("");
     } catch (error) {
       Toast.show({
         type: "error",
@@ -175,22 +179,22 @@ const [stocks, setStocks] = useState("");
               </Text>
             )}
 
-<Input
-  label="Stocks"
-  placeholder="0.00"
-  keyboardType="numeric"
-  value={stocks}
-  onChangeText={(text) => {
-    setStocks(text);
-    setErrors({ ...errors, stocks: "" });
-  }}
-/>
+            <Input
+              label="Stocks"
+              placeholder="0.00"
+              keyboardType="numeric"
+              value={stocks}
+              onChangeText={(text) => {
+                setStocks(text);
+                setErrors({ ...errors, stocks: "" });
+              }}
+            />
 
-{errors.stocks && (
-  <Text style={{ color: "red", fontSize: 12 }}>
-    {errors.stocks}
-  </Text>
-)}
+            {errors.stocks && (
+              <Text style={{ color: "red", fontSize: 12 }}>
+                {errors.stocks}
+              </Text>
+            )}
           </View>
         </Section>
 
@@ -283,8 +287,8 @@ const [stocks, setStocks] = useState("");
                     onValueChange={(itemValue) => setBuyTaxType(itemValue)}
                   >
                     <Picker.Item label="Select type" value="" />
-                    <Picker.Item label="Including" value="Including" />
-                    <Picker.Item label="Excluding" value="Excluding" />
+                    <Picker.Item label="Including" value="Inc" />
+                    <Picker.Item label="Excluding" value="Ex" />
                   </Picker>
                 </View>
               </View>
@@ -298,8 +302,8 @@ const [stocks, setStocks] = useState("");
                     onValueChange={(itemValue) => setSellTaxType(itemValue)}
                   >
                     <Picker.Item label="Select type" value="" />
-                    <Picker.Item label="Including" value="Including" />
-                    <Picker.Item label="Excluding" value="Excluding" />
+                    <Picker.Item label="Including" value="Inc" />
+                    <Picker.Item label="Excluding" value="Ex" />
                   </Picker>
                 </View>
               </View>
