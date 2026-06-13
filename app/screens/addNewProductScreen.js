@@ -2,13 +2,13 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  ScrollView,
+  DeviceEventEmitter, ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -60,7 +60,7 @@ export default function AddItemScreen() {
     }
 
     try {
-      const response = await fetch("http://10.32.64.215:8000/products", {
+      const response = await fetch("http://10.119.252.215:8000/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,6 +91,8 @@ export default function AddItemScreen() {
         });
         return;
       }
+      DeviceEventEmitter.emit("productAdded");
+
 
       Toast.show({
         type: "success",
@@ -108,6 +110,7 @@ export default function AddItemScreen() {
       setOfferPrice("");
       setErrors({});
       setTaxCode("");
+      setTaxPercentage("");
     } catch (error) {
       Toast.show({
         type: "error",

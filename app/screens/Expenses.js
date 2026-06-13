@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StatusBar,
@@ -17,80 +16,50 @@ export default function ExpenseScreen() {
   const SUBTLE = "#64748b";
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
 
-  const expenses = [
-    {
-      title: "Restocking Inventory",
-      amount: "$5,400.00",
-      date: "Oct 24, 2023",
-      color: "#1193d4",
-    },
-    {
-      title: "Store Maintenance",
-      amount: "$150.00",
-      date: "Oct 23, 2023",
-      color: "#f97316",
-    },
-    {
-      title: "Electricity Bill",
-      amount: "$320.50",
-      date: "Oct 20, 2023",
-      color: "#eab308",
-    },
-    {
-      title: "Delivery Services",
-      amount: "$85.00",
-      date: "Oct 18, 2023",
-      color: "#9333ea",
-    },
-    {
-      title: "Staff Refreshments",
-      amount: "$45.20",
-      date: "Oct 15, 2023",
-      color: "#14b8a6",
-    },
-    {
-      title: "Staff Refreshments",
-      amount: "$45.20",
-      date: "Oct 15, 2023",
-      color: "#14b8a6",
-    },
-    {
-      title: "Staff Refreshments",
-      amount: "$45.20",
-      date: "Oct 15, 2023",
-      color: "#14b8a6",
-    },
-    {
-      title: "Staff Refreshments",
-      amount: "$45.20",
-      date: "Oct 15, 2023",
-      color: "#14b8a6",
-    },
-    {
-      title: "Staff Refreshments",
-      amount: "$45.20",
-      date: "Oct 15, 2023",
-      color: "#14b8a6",
-    },
-    {
-      title: "Staff Refreshments",
-      amount: "$45.20",
-      date: "Oct 15, 2023",
-      color: "#14b8a6",
-    },
-    {
-      title: "Staff Refreshments",
-      amount: "$45.20",
-      date: "Oct 15, 2023",
-      color: "#14b8a6",
-    },
-  ];
+  const fetchExpenses = async () => {
+    try {
+      const response = await fetch("http://10.119.252.215:8000/expense");
+
+      const data = await response.json();
+
+      console.log("Expenses:", data);
+
+const sortedExpenses = data.sort(
+  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+);
+
+setExpenses(sortedExpenses);
+    } catch (error) {
+      console.log("Expense API Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
   const expensesWithId = expenses.map((item, index) => ({
     ...item,
-    id: `EXP-${1000 + expenses.length - index}`,
+    id: item._id || `EXP-${index + 1}`,
   }));
 
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+
+    return date.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
   const totalPages = Math.ceil(expenses.length / itemsPerPage);
 
   const pagedExpenses = expensesWithId.slice(
@@ -123,18 +92,17 @@ export default function ExpenseScreen() {
       {/* LIST */}
       <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         {pagedExpenses.map((item) => (
-          <View key={item.id} style={styles.card}>
+          <View key={item._id} style={styles.card}>
             <View style={styles.cardContent}>
-              {/* TOP ROW */}
               <View style={styles.rowBetween}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.amount}>{item.amount}</Text>
+                <Text style={styles.title}>{item.category}</Text>
+
+                <Text style={styles.amount}>₹{item.amount}</Text>
               </View>
 
-              {/* BOTTOM ROW */}
               <View style={styles.rowBetween}>
                 <Text style={styles.date}>
-                  {item.id} • {item.date}
+                  {item.account} • {formatDateTime(item.createdAt)}
                 </Text>
 
                 <View style={styles.actions}>
@@ -144,6 +112,7 @@ export default function ExpenseScreen() {
                   >
                     <FontAwesome5 name="edit" size={18} color={PRIMARY} />
                   </TouchableOpacity>
+
                   <TouchableOpacity style={styles.actionBtn}>
                     <FontAwesome5 name="trash" size={18} color="#ef4444" />
                   </TouchableOpacity>

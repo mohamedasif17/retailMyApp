@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-
 import {
+  DeviceEventEmitter,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -17,6 +16,7 @@ import {
   MenuOptions,
   MenuTrigger,
 } from "react-native-popup-menu";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export default function Product() {
   const [searchText, setSearchText] = useState("");
@@ -26,14 +26,28 @@ export default function Product() {
 
   useEffect(() => {
     fetchProducts();
+
+    const listener = DeviceEventEmitter.addListener("productAdded", () => {
+      fetchProducts();
+    });
+
+    return () => {
+      listener.remove();
+    };
   }, []);
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://10.32.64.215:8000/products");
+      const response = await fetch("http://10.119.252.215:8000/products");
 
-      const data = await response.json();
+    const data = await response.json();
 
+    const sortedProducts = data.sort((a, b) =>
+      b._id.localeCompare(a._id)
+    );
+
+    setProducts(sortedProducts);
+    setFilteredProducts(sortedProducts);
       setProducts(data);
       setFilteredProducts(data);
 
@@ -105,9 +119,9 @@ export default function Product() {
 
               <View style={styles.rightSection}>
                 <View style={styles.productPriceWrapper}>
-                 <Text style={styles.productPrice}>
-  ₹{product.offerPrice || product.sellingPrice}
-</Text>
+                  <Text style={styles.productPrice}>
+                    ₹{product.offerPrice || product.sellingPrice}
+                  </Text>
                   <Text style={styles.productStock}>
                     {product.stocks} in stock
                   </Text>
