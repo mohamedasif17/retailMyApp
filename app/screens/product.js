@@ -140,13 +140,18 @@ export default function Product() {
                   <MenuOptions
                     customStyles={{ optionsContainer: styles.menuOptions }}
                   >
-                    <MenuOption
-                      onSelect={() => navigation.navigate("AddNewProduct")}
-                    >
-                      <View style={styles.menuItem}>
-                        <FontAwesome5 name="edit" size={16} color="blue" />
-                        <Text style={styles.menuTextBlue}>Edit</Text>
-                      </View>
+<MenuOption
+  onSelect={() =>
+    navigation.navigate("AddNewProduct", {
+      product,
+      isEdit: true,
+    })
+  }
+>
+  <View style={styles.menuItem}>
+    <FontAwesome5 name="edit" size={16} color="blue" />
+    <Text style={styles.menuTextBlue}>Edit</Text>
+  </View>
                     </MenuOption>
 
                     <MenuOption

@@ -1,6 +1,7 @@
 import { Picker } from "@react-native-picker/picker";
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+
 import {
   DeviceEventEmitter, ScrollView,
   StatusBar,
@@ -22,6 +23,10 @@ const SUBTLE = "#6b7280";
 
 export default function AddItemScreen() {
   const navigation = useNavigation();
+    const route = useRoute();
+
+  const product = route.params?.product;
+  const isEdit = route.params?.isEdit || false;
   const [name, setName] = useState("");
   const [barcode, setBarcode] = useState("");
   const [buyingCost, setBuyingCost] = useState("");
@@ -34,6 +39,23 @@ export default function AddItemScreen() {
   const [sellTaxType, setSellTaxType] = useState("");
   const [description, setDescription] = useState("");
   const [stocks, setStocks] = useState("");
+
+  useEffect(() => {
+  if (isEdit && product) {
+    setName(product.name || "");
+    setDescription(product.description || "");
+    setBarcode(product.barcode || "");
+    setBuyingCost(product.buyingCost?.toString() || "");
+    setSellingPrice(product.sellingPrice?.toString() || "");
+    setStocks(product.stocks?.toString() || "");
+    setOfferPrice(product.offerPrice?.toString() || "");
+    setTaxCode(product.taxCode || "");
+    setTaxPercentage(product.taxPercentage?.toString() || "");
+    setBuyTaxType(product.buyTaxType || "");
+    setSellTaxType(product.sellTaxType || "");
+  }
+}, []);
+
   const handleAddProduct = async () => {
     let newErrors = {};
 
@@ -60,26 +82,31 @@ export default function AddItemScreen() {
     }
 
     try {
-      const response = await fetch("http://10.119.252.215:8000/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          description,
+     const url = isEdit
+  ? `http://10.119.252.215:8000/products/${product._id}`
+  : "http://10.119.252.215:8000/products";
 
-          barcode,
-          buyingCost: Number(buyingCost),
-          sellingPrice: Number(sellingPrice),
-          stocks: Number(stocks),
-          offerPrice: offerPrice ? Number(offerPrice) : 0,
-          taxCode,
-          buyTaxType,
-          sellTaxType,
-          taxPercentage: Number(taxPercentage),
-        }),
-      });
+const method = isEdit ? "PUT" : "POST";
+
+const response = await fetch(url, {
+  method,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name,
+    description,
+    barcode,
+    buyingCost: Number(buyingCost),
+    sellingPrice: Number(sellingPrice),
+    stocks: Number(stocks),
+    offerPrice: offerPrice ? Number(offerPrice) : 0,
+    taxCode,
+    buyTaxType,
+    sellTaxType,
+    taxPercentage: Number(taxPercentage),
+  }),
+});
 
       const data = await response.json();
 
@@ -92,25 +119,33 @@ export default function AddItemScreen() {
         return;
       }
       DeviceEventEmitter.emit("productAdded");
+DeviceEventEmitter.emit("productAdded");
 
+Toast.show({
+  type: "success",
+  text1: "Success",
+  text2: isEdit
+    ? "Product updated successfully"
+    : "Product added successfully",
+});
 
-      Toast.show({
-        type: "success",
-        text1: "Success",
-        text2: "Product added successfully",
-      });
-
-      setName("");
-      setDescription("");
-
-      setBarcode("");
-      setBuyingCost("");
-      setSellingPrice("");
-      setStocks("");
-      setOfferPrice("");
-      setErrors({});
-      setTaxCode("");
-      setTaxPercentage("");
+if (isEdit) {
+  navigation.goBack(); // Only go back after update
+} else {
+  // Stay on Add Product screen after create
+  setName("");
+  setDescription("");
+  setBarcode("");
+  setBuyingCost("");
+  setSellingPrice("");
+  setStocks("");
+  setOfferPrice("");
+  setErrors({});
+  setTaxCode("");
+  setTaxPercentage("");
+  setBuyTaxType("");
+  setSellTaxType("");
+}
     } catch (error) {
       Toast.show({
         type: "error",
@@ -129,7 +164,9 @@ export default function AddItemScreen() {
           <FontAwesome5 name="chevron-left" size={18} color="#111" />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>Add Item</Text>
+        <Text style={styles.headerTitle}>
+  {isEdit ? "Edit Item" : "Add Item"}
+          </Text>
         <View style={{ width: 32 }} />
       </View>
 
@@ -318,7 +355,9 @@ export default function AddItemScreen() {
       {/* FIXED BOTTOM BUTTON */}
       <TouchableOpacity style={styles.addBtn} onPress={handleAddProduct}>
         <FontAwesome5 name="plus-circle" size={20} color="#fff" />
-        <Text style={styles.addBtnText}>Add Item</Text>
+<Text style={styles.addBtnText}>
+  {isEdit ? "Update Item" : "Add Item"}
+</Text>
       </TouchableOpacity>
       <Toast position="top" topOffset={50} />
     </SafeAreaView>

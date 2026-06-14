@@ -28,7 +28,7 @@ export default function ExpenseScreen() {
 
       const data = await response.json();
 
-      console.log("Expenses:", data);
+      // console.log("Expenses:", data);
 
 const sortedExpenses = data.sort(
   (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
