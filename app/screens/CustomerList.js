@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StatusBar,
@@ -15,51 +15,57 @@ const BG = "#f6f7f8";
 const CARD = "#fff";
 const SUBTLE = "#64748b";
 
-const CUSTOMERS = [
-  {
-    id: "CUST-8832",
-    name: "Johnathan Doe",
-    bill: 1250,
-    paid: 1000,
-    due: 250,
-    points: 150,
-  },
-  {
-    id: "CUST-1025",
-    name: "Alice Smith",
-    bill: 500,
-    paid: 500,
-    due: 0,
-    points: 50,
-  },
-  {
-    id: "CUST-9901",
-    name: "Elena Rodriguez",
-    bill: 2450,
-    paid: 2000,
-    due: 450,
-    points: 320,
-  },
-  {
-    id: "CUST-5512",
-    name: "Michael K.",
-    bill: 120,
-    paid: 120,
-    due: 0,
-    points: 12,
-  },
-  // add more to test pagination
-];
+
+useEffect(() => {
+  fetchCustomers();
+}, []);
+
+const fetchCustomers = async () => {
+  try {
+    const response = await fetch("http://10.12.221.215:8000/customers");
+    const data = await response.json();
+
+    // Newest customer first
+    const sortedCustomers = data.sort((a, b) =>
+      b._id.localeCompare(a._id)
+    );
+
+    setCustomers(sortedCustomers);
+  } catch (error) {
+    console.log("Customer API Error:", error);
+  }
+};
 
 export default function CustomerListScreen() {
   const navigation = useNavigation();
 
-  /* PAGINATION */
+  const [customers, setCustomers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(CUSTOMERS.length / itemsPerPage);
 
-  const pagedCustomers = CUSTOMERS.slice(
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await fetch("http://10.12.221.215:8000/customers");
+      const data = await response.json();
+
+      const sortedCustomers = data.sort((a, b) =>
+        b._id.localeCompare(a._id)
+      );
+
+      setCustomers(sortedCustomers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const totalPages = Math.ceil(customers.length / itemsPerPage);
+
+  const pagedCustomers = customers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -86,8 +92,8 @@ export default function CustomerListScreen() {
       {/* LIST */}
       <ScrollView contentContainerStyle={{ paddingBottom: 180 , marginTop:10}}>
         {pagedCustomers.map((item) => (
-          <View key={item.id} style={styles.card}>
-            {/* TOP */}
+<View key={item._id} style={styles.card}>
+              {/* TOP */}
             <View style={styles.cardTop}>
               <View style={styles.left}>
                 <View style={styles.avatar}>
@@ -98,7 +104,8 @@ export default function CustomerListScreen() {
 
                 <View>
                   <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.id}>ID: #{item.id}</Text>
+<Text style={styles.id}>{item.phoneNumber}</Text>
+<Text style={styles.id}>{item.companyName}</Text>
                 </View>
               </View>
 
@@ -116,21 +123,10 @@ export default function CustomerListScreen() {
 
             {/* STATS */}
             <View style={styles.statsRow}>
-              <Info label="BILL" value={`₹${item.bill}`} />
-              <Info label="PAID" value={`₹${item.paid}`} />
-              <Info
-                label="DUE"
-                value={`₹${item.due}`}
-                color={item.due > 0 ? "#ef4444" : "#16a34a"}
-              />
-              <View style={{ alignItems: "flex-end" }}>
-                <Text style={styles.label}>PTS</Text>
-                <View style={styles.row}>
-                  <FontAwesome5 name="star" size={14} color="#facc15" />
-                  <Text style={styles.points}>{item.points}</Text>
-                </View>
-              </View>
-            </View>
+  <Info label="AREA" value={item.area} />
+  <Info label="DISTRICT" value={item.district} />
+  <Info label="AVOID" value={item.avoidPoint} />
+</View>
           </View>
         ))}
       </ScrollView>
