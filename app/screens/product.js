@@ -1,14 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
-  DeviceEventEmitter,
+  Alert, DeviceEventEmitter,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import {
   Menu,
@@ -38,7 +38,7 @@ export default function Product() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://10.119.252.215:8000/products");
+      const response = await fetch("http://10.12.221.215:8000/products");
 
     const data = await response.json();
 
@@ -57,6 +57,25 @@ export default function Product() {
       alert(error.message);
     }
   };
+
+ const deleteProduct = async (id) => {
+  try {
+    const response = await fetch(`http://10.12.221.215:8000/products/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      alert("Product deleted successfully");
+      fetchProducts();
+    } else {
+      const text = await response.text();
+      console.log(text);
+      alert("Failed to delete product");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -154,14 +173,27 @@ export default function Product() {
   </View>
                     </MenuOption>
 
-                    <MenuOption
-                      onSelect={() => alert("Delete " + product.name)}
-                    >
-                      <View style={styles.menuItem}>
-                        <FontAwesome5 name="trash-alt" size={16} color="red" />
-                        <Text style={styles.menuTextRed}>Delete</Text>
-                      </View>
-                    </MenuOption>
+                 <MenuOption
+  onSelect={() =>
+    Alert.alert(
+      "Delete Product",
+      `Are you sure you want to delete "${product.name}"?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => deleteProduct(product._id),
+        },
+      ]
+    )
+  }
+>
+  <View style={styles.menuItem}>
+    <FontAwesome5 name="trash-alt" size={16} color="red" />
+    <Text style={styles.menuTextRed}>Delete</Text>
+  </View>
+</MenuOption>
                   </MenuOptions>
                 </Menu>
               </View>

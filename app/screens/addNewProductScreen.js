@@ -83,8 +83,8 @@ export default function AddItemScreen() {
 
     try {
      const url = isEdit
-  ? `http://10.119.252.215:8000/products/${product._id}`
-  : "http://10.119.252.215:8000/products";
+  ? `http://10.12.221.215:8000/products/${product._id}`
+  : "http://10.12.221.215:8000/products";
 
 const method = isEdit ? "PUT" : "POST";
 
