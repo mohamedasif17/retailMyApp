@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -14,27 +15,6 @@ const PRIMARY = "#1193d4";
 const BG = "#f6f7f8";
 const CARD = "#fff";
 const SUBTLE = "#64748b";
-
-
-useEffect(() => {
-  fetchCustomers();
-}, []);
-
-const fetchCustomers = async () => {
-  try {
-    const response = await fetch("http://10.12.221.215:8000/customers");
-    const data = await response.json();
-
-    // Newest customer first
-    const sortedCustomers = data.sort((a, b) =>
-      b._id.localeCompare(a._id)
-    );
-
-    setCustomers(sortedCustomers);
-  } catch (error) {
-    console.log("Customer API Error:", error);
-  }
-};
 
 export default function CustomerListScreen() {
   const navigation = useNavigation();
@@ -53,9 +33,7 @@ export default function CustomerListScreen() {
       const response = await fetch("http://10.12.221.215:8000/customers");
       const data = await response.json();
 
-      const sortedCustomers = data.sort((a, b) =>
-        b._id.localeCompare(a._id)
-      );
+      const sortedCustomers = data.sort((a, b) => b._id.localeCompare(a._id));
 
       setCustomers(sortedCustomers);
     } catch (error) {
@@ -63,6 +41,31 @@ export default function CustomerListScreen() {
     }
   };
 
+  const deleteCustomer = async (id) => {
+    try {
+      const response = await fetch(
+        `http://10.12.221.215:8000/customers/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        Alert.alert("Success", "Customer deleted successfully");
+
+        // Refresh list
+        fetchCustomers();
+
+        // OR update state directly:
+        // setCustomers(prev => prev.filter(item => item._id !== id));
+      } else {
+        Alert.alert("Error", "Failed to delete customer");
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "Something went wrong");
+    }
+  };
   const totalPages = Math.ceil(customers.length / itemsPerPage);
 
   const pagedCustomers = customers.slice(
@@ -90,10 +93,10 @@ export default function CustomerListScreen() {
       </View>
 
       {/* LIST */}
-      <ScrollView contentContainerStyle={{ paddingBottom: 180 , marginTop:10}}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 180, marginTop: 10 }}>
         {pagedCustomers.map((item) => (
-<View key={item._id} style={styles.card}>
-              {/* TOP */}
+          <View key={item._id} style={styles.card}>
+            {/* TOP */}
             <View style={styles.cardTop}>
               <View style={styles.left}>
                 <View style={styles.avatar}>
@@ -104,16 +107,34 @@ export default function CustomerListScreen() {
 
                 <View>
                   <Text style={styles.name}>{item.name}</Text>
-<Text style={styles.id}>{item.phoneNumber}</Text>
-<Text style={styles.id}>{item.companyName}</Text>
+                  <Text style={styles.id}>{item.phoneNumber}</Text>
+                  <Text style={styles.id}>{item.companyName}</Text>
                 </View>
               </View>
 
               <View style={styles.actions}>
-                <TouchableOpacity style={styles.iconBtn}  onPress={() => navigation.navigate("CreateCustomer")}>
+                <TouchableOpacity
+                  style={styles.iconBtn}
+                  onPress={() => navigation.navigate("CreateCustomer")}
+                >
                   <FontAwesome5 name="edit" size={18} color={SUBTLE} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconBtn}>
+                <TouchableOpacity
+                  style={styles.iconBtn}
+                  onPress={() =>
+                    Alert.alert("Delete Customer", `Delete ${item.name}?`, [
+                      {
+                        text: "Cancel",
+                        style: "cancel",
+                      },
+                      {
+                        text: "Delete",
+                        style: "destructive",
+                        onPress: () => deleteCustomer(item._id),
+                      },
+                    ])
+                  }
+                >
                   <FontAwesome5 name="trash" size={18} color="#ef4444" />
                 </TouchableOpacity>
               </View>
@@ -123,10 +144,10 @@ export default function CustomerListScreen() {
 
             {/* STATS */}
             <View style={styles.statsRow}>
-  <Info label="AREA" value={item.area} />
-  <Info label="DISTRICT" value={item.district} />
-  <Info label="AVOID" value={item.avoidPoint} />
-</View>
+              <Info label="AREA" value={item.area} />
+              <Info label="DISTRICT" value={item.district} />
+              <Info label="AVOID" value={item.avoidPoint} />
+            </View>
           </View>
         ))}
       </ScrollView>
@@ -161,7 +182,10 @@ export default function CustomerListScreen() {
       </View>
 
       {/* FAB */}
-      <TouchableOpacity style={styles.fab}   onPress={() => navigation.navigate("CreateCustomer")}>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate("CreateCustomer")}
+      >
         <FontAwesome5 name="plus" size={22} color="#fff" />
       </TouchableOpacity>
     </View>
