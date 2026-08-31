@@ -38,7 +38,7 @@ export default function Product() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://10.12.221.215:8000/products");
+      const response = await fetch("http://10.79.45.215:8000/products");
 
     const data = await response.json();
 

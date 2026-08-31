@@ -1,13 +1,13 @@
 import { Picker } from "@react-native-picker/picker";
 import React from "react";
 import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -37,6 +37,7 @@ export default function CreateCustomerScreen({ navigation }) {
         <Section title="Personal Information">
           <Input label="Full Name (Required)" placeholder="John Doe" />
           <Input label="Phone Number" placeholder="+1 (555) 000-0000" />
+          <Input label="WhatsApp" placeholder="+1 (555) 000-0000" />
 
           <Select label="Customer Group">
             <Picker.Item label="Select group" value="" />
@@ -44,6 +45,7 @@ export default function CreateCustomerScreen({ navigation }) {
             <Picker.Item label="Wholesale" value="wholesale" />
             <Picker.Item label="VIP" value="vip" />
             <Picker.Item label="Employee" value="employee" />
+            <Picker.Item label="Waling customer" value="walking" />
           </Select>
           <Select label="Avoid Points Group">
             <Picker.Item label="Select " value="" />
@@ -255,10 +257,6 @@ const styles = StyleSheet.create({
   },
 
   bottomBar: {
-    // position: "absolute",
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
     padding: 14,
     backgroundColor: "#fff",
     borderTopWidth: 1,

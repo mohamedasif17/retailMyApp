@@ -30,7 +30,7 @@ export default function CustomerListScreen() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await fetch("http://10.12.221.215:8000/customers");
+      const response = await fetch("http://10.79.45.215:8000/customers");
       const data = await response.json();
 
       const sortedCustomers = data.sort((a, b) => b._id.localeCompare(a._id));
