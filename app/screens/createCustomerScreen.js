@@ -9,9 +9,10 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const PRIMARY = "#1193d4";
@@ -45,7 +46,11 @@ export default function CreateCustomerScreen({ navigation }) {
   const createCustomer = async () => {
     // Required validation
     if (!name.trim()) {
-      Alert.alert("Validation Error", "Please enter customer name");
+      Toast.show({
+        type: "error",
+        text1: "Validation Error",
+        text2: "Please enter customer name",
+      });
       return;
     }
 
@@ -67,8 +72,7 @@ export default function CreateCustomerScreen({ navigation }) {
           // Backend API key names must match exactly
           avoidPoint: avoidPoint || "No",
 
-          Customergroup:
-            customerGroup || "Walking Customer",
+          Customergroup: customerGroup || "Walking Customer",
 
           companyName: companyName,
           taxNumber: taxNumber,
@@ -85,26 +89,21 @@ export default function CreateCustomerScreen({ navigation }) {
       if (!response.ok) {
         throw new Error(data.message || "Failed to create customer");
       }
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Customer created successfully",
+      });
+
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1500);
 
       console.log("Customer created:", data);
-
-      Alert.alert(
-        "Success",
-        "Customer created successfully",
-        [
-          {
-            text: "OK",
-            onPress: () => navigation.goBack(),
-          },
-        ]
-      );
     } catch (error) {
       console.log("Create customer error:", error);
 
-      Alert.alert(
-        "Error",
-        error.message || "Something went wrong"
-      );
+      Alert.alert("Error", error.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -117,36 +116,28 @@ export default function CreateCustomerScreen({ navigation }) {
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesome5
-            name="chevron-left"
-            size={18}
-            color="#111"
-          />
+          <FontAwesome5 name="chevron-left" size={18} color="#111" />
         </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>
-          Create Customer
-        </Text>
+        <Text style={styles.headerTitle}>Create Customer</Text>
 
         {/* Empty View for center alignment */}
         <View style={{ width: 18 }} />
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
-
         {/* PERSONAL INFO */}
         <Section title="Personal Information">
-
-        <Input
-  label={
-    <>
-      <Text style={{ color: "tomato" }}>Full Name (Required)</Text>
-    </>
-  }
-  placeholder="John Doe"
-  value={name}
-  onChangeText={setName}
-/>
+          <Input
+            label={
+              <>
+                <Text style={{ color: "tomato" }}>Full Name (Required)</Text>
+              </>
+            }
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+          />
 
           <Input
             label="Phone Number"
@@ -170,35 +161,17 @@ export default function CreateCustomerScreen({ navigation }) {
             selectedValue={customerGroup}
             onValueChange={setCustomerGroup}
           >
-            <Picker.Item
-              label="Select group"
-              value=""
-            />
+            <Picker.Item label="Select group" value="" />
 
-            <Picker.Item
-              label="Retail"
-              value="Retail"
-            />
+            <Picker.Item label="Retail" value="Retail" />
 
-            <Picker.Item
-              label="Wholesale"
-              value="Wholesale"
-            />
+            <Picker.Item label="Wholesale" value="Wholesale" />
 
-            <Picker.Item
-              label="VIP"
-              value="VIP"
-            />
+            <Picker.Item label="VIP" value="VIP" />
 
-            <Picker.Item
-              label="Employee"
-              value="Employee"
-            />
+            <Picker.Item label="Employee" value="Employee" />
 
-            <Picker.Item
-              label="Walking Customer"
-              value="Walking Customer"
-            />
+            <Picker.Item label="Walking Customer" value="Walking Customer" />
           </Select>
 
           {/* AVOID POINT */}
@@ -207,29 +180,18 @@ export default function CreateCustomerScreen({ navigation }) {
             selectedValue={avoidPoint}
             onValueChange={setAvoidPoint}
           >
-            <Picker.Item
-              label="Select"
-              value=""
-            />
+            <Picker.Item label="Select" value="" />
 
-            <Picker.Item
-              label="Yes"
-              value="Yes"
-            />
+            <Picker.Item label="Yes" value="Yes" />
 
-            <Picker.Item
-              label="No"
-              value="No"
-            />
+            <Picker.Item label="No" value="No" />
           </Select>
-
         </Section>
 
         <Divider />
 
         {/* BUSINESS DETAILS */}
         <Section title="Business Details">
-
           <Input
             label="Company Name"
             placeholder="Acme Corp"
@@ -243,16 +205,13 @@ export default function CreateCustomerScreen({ navigation }) {
             value={taxNumber}
             onChangeText={setTaxNumber}
           />
-
         </Section>
 
         <Divider />
 
         {/* ADDRESS */}
         <Section title="Address & Location">
-
           <Row>
-
             <View style={styles.halfInput}>
               <Input
                 label="Area"
@@ -270,7 +229,6 @@ export default function CreateCustomerScreen({ navigation }) {
                 onChangeText={setDistrict}
               />
             </View>
-
           </Row>
 
           <TextArea
@@ -279,14 +237,12 @@ export default function CreateCustomerScreen({ navigation }) {
             value={fullAddress}
             onChangeText={setFullAddress}
           />
-
         </Section>
 
         <Divider />
 
         {/* LOYALTY */}
         <Section title="Loyalty Program">
-
           <Label>Initial Reward Points</Label>
 
           <View style={styles.readOnlyBox}>
@@ -298,50 +254,29 @@ export default function CreateCustomerScreen({ navigation }) {
               style={styles.pointsInput}
             />
 
-            <FontAwesome5
-              name="star"
-              size={18}
-              color={PRIMARY}
-            />
-
+            <FontAwesome5 name="star" size={18} color={PRIMARY} />
           </View>
-
         </Section>
-
       </ScrollView>
 
       {/* FIXED BUTTON */}
       <View style={styles.bottomBar}>
-
         <TouchableOpacity
-          style={[
-            styles.createBtn,
-            loading && { opacity: 0.7 },
-          ]}
+          style={[styles.createBtn, loading && { opacity: 0.7 }]}
           onPress={createCustomer}
           disabled={loading}
         >
-
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
             <>
-              <FontAwesome5
-                name="user-plus"
-                size={18}
-                color="#fff"
-              />
+              <FontAwesome5 name="user-plus" size={18} color="#fff" />
 
-              <Text style={styles.createText}>
-                Create Customer
-              </Text>
+              <Text style={styles.createText}>Create Customer</Text>
             </>
           )}
-
         </TouchableOpacity>
-
       </View>
-
     </SafeAreaView>
   );
 }
@@ -351,9 +286,7 @@ export default function CreateCustomerScreen({ navigation }) {
 function Section({ title, children }) {
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>
-        {title}
-      </Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
 
       {children}
     </View>
@@ -365,11 +298,7 @@ function Divider() {
 }
 
 function Label({ children }) {
-  return (
-    <Text style={styles.label}>
-      {children}
-    </Text>
-  );
+  return <Text style={styles.label}>{children}</Text>;
 }
 
 function Input({ label, ...props }) {
@@ -407,21 +336,13 @@ function TextArea({ label, ...props }) {
   );
 }
 
-function Select({
-  label,
-  children,
-  selectedValue,
-  onValueChange,
-}) {
+function Select({ label, children, selectedValue, onValueChange }) {
   return (
     <View style={{ marginBottom: 14 }}>
       <Label>{label}</Label>
 
       <View style={styles.selectBox}>
-        <Picker
-          selectedValue={selectedValue}
-          onValueChange={onValueChange}
-        >
+        <Picker selectedValue={selectedValue} onValueChange={onValueChange}>
           {children}
         </Picker>
       </View>
@@ -430,11 +351,7 @@ function Select({
 }
 
 function Row({ children }) {
-  return (
-    <View style={styles.row}>
-      {children}
-    </View>
-  );
+  return <View style={styles.row}>{children}</View>;
 }
 
 /* ---------------- STYLES ---------------- */

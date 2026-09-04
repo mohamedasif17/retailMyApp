@@ -1,6 +1,7 @@
 import React from "react";
 import { StatusBar } from "react-native";
 import "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 
 import {
   NavigationContainer,
@@ -17,8 +18,10 @@ const App = () => {
 
       <NavigationIndependentTree>
         <NavigationContainer>
+
           <AppStackNavigator />
         </NavigationContainer>
+            <Toast />
       </NavigationIndependentTree>
     </MenuProvider>
   );
