@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  DeviceEventEmitter,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -22,7 +23,7 @@ const TEXT = "#111618";
 const SUBTLE = "#617c89";
 
 // თქვენი API URL
-const API_URL = "http://10.79.45.215:8000/customers";
+const API_URL = "http://10.189.46.215:8000/customers";
 
 export default function CreateCustomerScreen({ navigation }) {
   // ================= STATE =================
@@ -89,6 +90,8 @@ export default function CreateCustomerScreen({ navigation }) {
       if (!response.ok) {
         throw new Error(data.message || "Failed to create customer");
       }
+          DeviceEventEmitter.emit("customerCreated");
+
       Toast.show({
         type: "success",
         text1: "Success",

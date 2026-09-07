@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
+  DeviceEventEmitter,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -28,9 +29,25 @@ export default function CustomerListScreen() {
     fetchCustomers();
   }, []);
 
+  useEffect(() => {
+  const subscription = DeviceEventEmitter.addListener(
+    "customerCreated",
+    async () => {
+      // console.log("🔥 customerCreated event received");
+
+      await fetchCustomers();
+
+      setCurrentPage(1);
+    }
+  );
+
+  return () => {
+    subscription.remove();
+  };
+}, []);
   const fetchCustomers = async () => {
     try {
-      const response = await fetch("http://10.79.45.215:8000/customers");
+      const response = await fetch("http://10.189.46.215:8000/customers");
       const data = await response.json();
 
       const sortedCustomers = data.sort((a, b) => b._id.localeCompare(a._id));
@@ -44,7 +61,7 @@ export default function CustomerListScreen() {
   const deleteCustomer = async (id) => {
     try {
       const response = await fetch(
-        `http://10.12.221.215:8000/customers/${id}`,
+        `http://10.189.46.215:8000/customers/${id}`,
         {
           method: "DELETE",
         }
